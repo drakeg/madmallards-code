@@ -9,7 +9,7 @@
 
 ## Current components
 `app` serves `/`, `/health`, `/api/v1/info`, and OpenAPI `/docs`.
-`db` is provisioned and health-checked, but persistence models/migrations remain open backlog items.
+`db` is provisioned and health-checked, with Alembic migration-managed project, coding session, and chat message tables.
 
 ## Decision rationale
 Server-rendered UI reduces initial operational complexity; client-side enhancements can
