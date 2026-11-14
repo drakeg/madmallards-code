@@ -40,3 +40,17 @@ are handled by Alembic revisions in `migrations/versions`, not `create_all` on s
 For local development, set `DATABASE_URL` before running `alembic upgrade head`.
 Use `docker compose exec db mariadb -u $DB_USER -p $DB_NAME` only when shell
 environment variables are intentionally configured; avoid printing passwords.
+
+## Ollama integration (MMC-005)
+
+Install and start Ollama on the Docker host, then pull a model such as \`ollama pull qwen3:4b\`.
+The Compose web application connects to the host using \`OLLAMA_BASE_URL\`. If you run
+Ollama on another trusted machine, configure its reachable URL in the ignored \`.env\`.
+
+- \`GET /api/v1/models\` lists locally available models (cloud-backed Ollama entries are excluded).
+- \`POST /api/v1/models/chat\` accepts \`{"model":"qwen3:4b","messages":[{"role":"user","content":"Hi"}]}\`
+  and responds with newline-delimited JSON events of type \`token\`, \`done\`, or \`error\`.
+
+This is an API-only integration; the interactive browser chat and persistent conversation
+workflow are tracked in MMC-006. **Security:** the application is bound to localhost.
+Do not expose the unauthenticated model API to the internet.

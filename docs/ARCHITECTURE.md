@@ -15,3 +15,11 @@
 Server-rendered UI reduces initial operational complexity; client-side enhancements can
 be introduced after agent workflows stabilize. MariaDB supports the user's existing stack
 preference without introducing multiple database engines.
+
+## Ollama adapter
+
+A dedicated \`OllamaProvider\` talks to the configured endpoint through HTTPX.
+The public app API provides an installed-model list and NDJSON token streaming.
+The upstream address is administrator-configured, not request-controlled, and
+chat requests are validated against the installed model names. A future auth
+layer must protect these endpoints before any remote deployment.
