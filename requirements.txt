@@ -4,3 +4,4 @@ jinja2>=3.1.6,<4
 sqlalchemy>=2.0.40,<3
 pymysql>=1.1.1,<2
 cryptography>=50,<51
+alembic>=1.15,<2

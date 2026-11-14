@@ -14,6 +14,6 @@ Each sprint is two weeks; dates are assigned at sprint planning, not assumed.
 ## Sprint 1 execution
 - MMC-001 architecture, docs and repository: in progress
 - MMC-002 Compose with database and health checks: in progress
-- MMC-003 API scaffold; persistence models/migrations pending
+- MMC-003 persistence models/migrations implemented; test and PR review pending
 - MMC-004 Bootstrap 5 shell: in progress
 - Test and CI validation required before declaring completion
