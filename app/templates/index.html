@@ -16,10 +16,31 @@
       <span class="badge text-bg-primary mb-3">Sprint 1</span>
       <h1>AI coding, on your terms.</h1>
       <p class="lead text-secondary">Self-hosted coding agents with local model support and GitHub workflows.</p>
-      <p>Project scaffolding is ready. Agent execution is not enabled in this foundation release.</p>
+      <p>Local AI model discovery is available. Coding-agent execution and persistent browser chat are not enabled yet.</p>
+      <div class="card border-0 bg-light mt-4"><div class="card-body">
+        <h2 class="h5">Local Ollama connection</h2>
+        <div id="model-status" role="status" aria-live="polite">Checking local models…</div>
+        <ul class="mb-0 mt-2" id="model-list"></ul>
+      </div></div>
       <a href="/docs" class="btn btn-primary">Explore API</a>
       <a href="/health" class="btn btn-outline-secondary ms-2">Health check</a>
     </div>
   </main>
+<script>
+  fetch('/api/v1/models').then(async response => {
+    if (!response.ok) throw new Error('Model service unavailable');
+    const result = await response.json();
+    const list = document.getElementById('model-list');
+    for (const model of result.models) {
+      const row = document.createElement('li');
+      row.textContent = model.name;
+      list.appendChild(row);
+    }
+    document.getElementById('model-status').textContent = result.models.length
+      ? `${result.models.length} local model(s) available` : 'No local models installed';
+  }).catch(() => {
+    document.getElementById('model-status').textContent = 'Ollama is unavailable. Check local service and configuration.';
+  });
+</script>
 </body>
 </html>

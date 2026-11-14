@@ -17,3 +17,8 @@ Each sprint is two weeks; dates are assigned at sprint planning, not assumed.
 - MMC-003 persistence models/migrations implemented; test and PR review pending
 - MMC-004 Bootstrap 5 shell: in progress
 - Test and CI validation required before declaring completion
+
+## Sprint 2 implementation candidate
+
+- MMC-005 local Ollama adapter, model discovery, streaming API, mock tests
+- MMC-006 responsive browser chat and persisted sessions (following increment)
