@@ -2,12 +2,16 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app.api_models import router as models_router
+from app.conversations import router as conversations_router
 
 app = FastAPI(title="Mad Mallards Code", version="0.1.0")
 app.include_router(models_router)
+app.include_router(conversations_router)
+app.mount('/static', StaticFiles(directory=str(Path(__file__).parent / 'static')), name='static')
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 

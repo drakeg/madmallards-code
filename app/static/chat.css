@@ -1,0 +1,23 @@
+html, body { height:100%; }
+body { background:#f5f7fb; }
+.shell { min-height:calc(100vh - 58px); }
+.sidebar { background:#172134; color:#fff; border-right:1px solid #30405b; }
+.sidebar-label { font-size:.78rem; text-transform:uppercase; color:#9fafc6; letter-spacing:.08em; }
+.conversation-item { color:#d6e1f1; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.conversation-item:hover,.conversation-item.active { color:#fff; background:#33445f; }
+.chat-panel { min-height:calc(100vh - 58px); display:flex; flex-direction:column; }
+.chat-scroll { flex:1; overflow:auto; min-height:280px; max-height:calc(100vh - 260px); }
+.message { max-width:850px; margin:0 auto 1.4rem; padding:1.25rem; border-radius:1rem; }
+.message-user { background:#e3edff; }
+.message-assistant { background:white; border:1px solid #e4e9f2; }
+.message-role { font-size:.75rem; letter-spacing:.04em; font-weight:700; color:#526681; margin-bottom:.55rem; text-transform:uppercase; }
+.message-text { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.6; }
+#empty-state { max-width:680px; margin:10vh auto; }
+.composer-wrap { background:white; border-top:1px solid #e4e9f2; }
+textarea { resize:vertical; min-height:60px; max-height:220px; }
+@media (max-width:767px) {
+  .sidebar { border-right:0; }
+  .sidebar .conversation-list-wrap { max-height:135px; overflow:auto; }
+  .chat-panel { min-height:70vh; }
+  .chat-scroll { max-height:60vh; }
+}

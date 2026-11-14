@@ -54,3 +54,14 @@ Ollama on another trusted machine, configure its reachable URL in the ignored \`
 This is an API-only integration; the interactive browser chat and persistent conversation
 workflow are tracked in MMC-006. **Security:** the application is bound to localhost.
 Do not expose the unauthenticated model API to the internet.
+
+## Browser chat (MMC-006)
+
+Open http://localhost:8096 and select a local model. Start a conversation, enter a
+question, and watch the response stream. Messages are persisted in MariaDB, so
+you can return to earlier conversations after reloading the page.
+
+This is a **single-user localhost MVP**. Do not expose the service publicly:
+authentication, authorizations, cross-user isolation, concurrent-turn safety,
+and destructive-tool policies are not yet implemented. Cancelling a response
+saves the user's question but does not persist a partial assistant response.
