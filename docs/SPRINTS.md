@@ -22,3 +22,13 @@ Each sprint is two weeks; dates are assigned at sprint planning, not assumed.
 
 - MMC-005 local Ollama adapter, model discovery, streaming API, mock tests
 - MMC-006 responsive browser chat and persisted sessions (following increment)
+
+## MMC-006 — Usable browser chat increment
+
+- Responsive Bootstrap 5 chat composer and conversation sidebar
+- Model selector backed by installed local Ollama models
+- NDJSON response streaming with stop button
+- MariaDB persistence for user and assistant messages
+- Conversation history reload and automated API tests
+
+Still out of scope: GitHub code-edit agents, multi-user security, concurrency locks, token budgets.

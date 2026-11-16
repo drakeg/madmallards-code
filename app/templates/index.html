@@ -3,44 +3,59 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ project }}</title>
+  <meta name="theme-color" content="#172134">
+  <title>Mad Mallards Code — Local AI Chat</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/chat.css" rel="stylesheet">
+  <script src="/static/chat.js" defer></script>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container"><a class="navbar-brand fw-semibold" href="/">Mad Mallards Code</a>
-    <span class="navbar-text text-white-50">Foundation · v0.1</span></div>
+<body>
+  <nav class="navbar navbar-dark bg-dark px-3" aria-label="Primary">
+    <a class="navbar-brand fw-bold" href="/">Mad Mallards Code</a>
+    <span class="navbar-text text-white-50 small">Local AI workspace · Chat MVP</span>
   </nav>
-  <main class="container py-5">
-    <div class="p-5 bg-white border rounded-4 shadow-sm">
-      <span class="badge text-bg-primary mb-3">Sprint 1</span>
-      <h1>AI coding, on your terms.</h1>
-      <p class="lead text-secondary">Self-hosted coding agents with local model support and GitHub workflows.</p>
-      <p>Local AI model discovery is available. Coding-agent execution and persistent browser chat are not enabled yet.</p>
-      <div class="card border-0 bg-light mt-4"><div class="card-body">
-        <h2 class="h5">Local Ollama connection</h2>
-        <div id="model-status" role="status" aria-live="polite">Checking local models…</div>
-        <ul class="mb-0 mt-2" id="model-list"></ul>
-      </div></div>
-      <a href="/docs" class="btn btn-primary">Explore API</a>
-      <a href="/health" class="btn btn-outline-secondary ms-2">Health check</a>
+  <div class="container-fluid shell">
+    <div class="row">
+      <aside class="col-md-3 col-xl-2 sidebar p-3">
+        <button type="button" id="new-chat" class="btn btn-primary w-100 mb-4">+ New chat</button>
+        <div class="sidebar-label mb-2">Conversations</div>
+        <div class="conversation-list-wrap"><div id="conversation-list" class="d-grid gap-1"></div></div>
+        <hr class="border-secondary my-4">
+        <p class="small text-white-50 mb-1">Runs on your Mac using Ollama.</p>
+        <a href="/docs" class="small link-info">API reference</a>
+      </aside>
+      <main class="col-md-9 col-xl-10 p-0 chat-panel">
+        <header class="px-3 px-md-4 py-3 bg-white border-bottom d-flex flex-wrap gap-3 justify-content-between align-items-center">
+          <div>
+            <div class="text-uppercase text-secondary small">Workspace</div>
+            <h1 id="conversation-title" class="h5 mb-0">New conversation</h1>
+          </div>
+          <div>
+            <label for="model-select" class="small fw-semibold me-2">Local model</label>
+            <select id="model-select" class="form-select form-select-sm d-inline-block w-auto" aria-label="Local AI model"></select>
+          </div>
+        </header>
+        <section id="messages" class="chat-scroll p-3 p-md-4" aria-label="Conversation messages" aria-live="polite">
+          <div id="empty-state" class="text-center">
+            <div class="display-6 fw-semibold mb-3">What can I help you build?</div>
+            <p class="text-secondary lead">Ask a question, brainstorm an architecture, or paste a code problem. Your conversation is saved locally.</p>
+            <p class="small text-secondary">Agent file editing and automatic GitHub changes are coming in later sprints.</p>
+          </div>
+        </section>
+        <div class="composer-wrap p-3 p-md-4">
+          <form id="composer" class="mx-auto" style="max-width:850px">
+            <label for="prompt" class="form-label visually-hidden">Your question</label>
+            <textarea id="prompt" class="form-control mb-2" rows="2" maxlength="20000" placeholder="Ask Mad Mallards Code anything…" required></textarea>
+            <div class="d-flex align-items-center gap-2">
+              <div id="connection-status" role="status" class="small text-secondary me-auto">Connecting to Ollama…</div>
+              <button type="button" id="cancel-button" class="btn btn-outline-secondary btn-sm" hidden>Stop</button>
+              <button type="submit" id="send-button" class="btn btn-primary px-4" disabled>Send</button>
+            </div>
+            <div class="small text-secondary mt-2">Enter to send · Shift+Enter for a new line · Local use only</div>
+          </form>
+        </div>
+      </main>
     </div>
-  </main>
-<script>
-  fetch('/api/v1/models').then(async response => {
-    if (!response.ok) throw new Error('Model service unavailable');
-    const result = await response.json();
-    const list = document.getElementById('model-list');
-    for (const model of result.models) {
-      const row = document.createElement('li');
-      row.textContent = model.name;
-      list.appendChild(row);
-    }
-    document.getElementById('model-status').textContent = result.models.length
-      ? `${result.models.length} local model(s) available` : 'No local models installed';
-  }).catch(() => {
-    document.getElementById('model-status').textContent = 'Ollama is unavailable. Check local service and configuration.';
-  });
-</script>
+  </div>
 </body>
 </html>

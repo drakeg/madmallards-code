@@ -21,4 +21,4 @@ def test_home():
     result = client.get("/")
     assert result.status_code == 200
     assert "Mad Mallards Code" in result.text
-    assert "Sprint 1" in result.text
+    assert 'id="composer"' in result.text
