@@ -65,3 +65,16 @@ This is a **single-user localhost MVP**. Do not expose the service publicly:
 authentication, authorizations, cross-user isolation, concurrent-turn safety,
 and destructive-tool policies are not yet implemented. Cancelling a response
 saves the user's question but does not persist a partial assistant response.
+
+## Read-only repository workspace browser
+
+Create \`workspaces/\` in this project (or set \`WORKSPACES_HOST_PATH\` in \`.env\`
+to an explicitly approved directory). Put individual repository folders directly
+under it, for example \`workspaces/myproject/\`. Only this directory is mounted
+into the application, **read-only**. Hidden files, symlinks, large files, and
+common secret/configuration paths are excluded from file previews.
+
+The \`/api/v1/workspaces\` endpoints provide workspace listing, directory trees,
+and bounded text previews. This **does not grant the AI write or shell access**.
+Authentication and robust multi-user isolation are future requirements; keep
+the application bound to localhost.
