@@ -32,3 +32,11 @@ Each sprint is two weeks; dates are assigned at sprint planning, not assumed.
 - Conversation history reload and automated API tests
 
 Still out of scope: GitHub code-edit agents, multi-user security, concurrency locks, token budgets.
+
+## MMC-008 — Read-only workspace discovery increment
+
+- Bind only an administrator-selected dedicated host directory, read-only, into the app
+- Expose workspace list, safe directory tree and text preview API endpoints
+- Explicitly reject hidden files, known secrets, symlinks, traversal and large/binary files
+- Provide file preview in the web interface without execution or editing
+- Remaining: authorized workspace provisioning and isolated write-capable agent workers
