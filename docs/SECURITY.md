@@ -12,3 +12,9 @@ This is a development foundation, not production-ready remote execution software
 - Require explicit consent gates for destructive commands and merges.
 - Pin dependencies to reviewed secure releases before production release; baseline ranges
   and image tags need routine vulnerability scanning and lockfile management.
+
+## Database major upgrades
+
+MariaDB major upgrades must not be automated against an existing persistent volume.
+Keep 11.8 until a verified backup, restoration test, compatibility review, and
+explicit migration procedure are available. Renovate ignores MariaDB major upgrades.

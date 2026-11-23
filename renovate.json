@@ -2,5 +2,20 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Require reviewed backups and migration plan for MariaDB major upgrades",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "mariadb"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    }
   ]
 }
