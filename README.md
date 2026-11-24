@@ -89,3 +89,11 @@ included merely because you preview a file. Attachments are bounded to 24 KB.
 File content is treated as untrusted reference data. This is a read-only coding
 assistant increment, **not** a permission to modify files or execute commands.
 Do not attach confidential text to any provider you do not control.
+
+## Propose a code change without writing files
+
+Open a repository text file in the sidebar and expand **Draft a proposed
+replacement**. Edit the proposed text and select **Preview diff**. The API
+compares it with the original and returns a unified diff with a SHA-256
+staleness check. This is a **dry-run only**: there is no apply endpoint,
+and the repository mount remains read-only.

@@ -1,10 +1,13 @@
 """Constrained, read-only browsing of administrator-mounted local workspaces."""
+import difflib
+import hashlib
 import os
 import re
 from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/api/v1/workspaces", tags=["workspaces"])
 WORKSPACE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$")
@@ -114,4 +117,45 @@ def view_file(
         content = candidate.read_text(encoding="utf-8")
     except (UnicodeError, OSError):
         raise HTTPException(415, "Cannot preview file") from None
-    return {"workspace": workspace, "path": path, "content": content, "read_only": True}
+    return {
+        "workspace": workspace,
+        "path": path,
+        "content": content,
+        "sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
+        "read_only": True,
+    }
+
+
+class ProposalRequest(BaseModel):
+    path: str = Field(min_length=1, max_length=2048)
+    baseline_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    proposed_content: str = Field(max_length=128 * 1024)
+
+
+@router.post("/{workspace}/proposals")
+def preview_proposal(
+    workspace: str,
+    payload: ProposalRequest,
+    root: Annotated[Path, Depends(workspace_root)],
+) -> dict:
+    """Produce a unified diff without modifying the workspace."""
+    original = view_file(workspace, root, payload.path)
+    if original["sha256"] != payload.baseline_sha256:
+        raise HTTPException(status_code=409, detail="File changed; reload before proposing edits")
+    old_lines = original["content"].splitlines(keepends=True)
+    new_lines = payload.proposed_content.splitlines(keepends=True)
+    diff = "".join(difflib.unified_diff(
+        old_lines,
+        new_lines,
+        fromfile=f"a/{payload.path}",
+        tofile=f"b/{payload.path}",
+        n=3,
+    ))
+    return {
+        "workspace": workspace,
+        "path": payload.path,
+        "changed": bool(diff),
+        "diff": diff,
+        "read_only": True,
+        "applied": False,
+    }
