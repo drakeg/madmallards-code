@@ -48,6 +48,7 @@
         <section id="file-preview" class="px-3 px-md-4 py-3 border-bottom bg-white" hidden aria-label="File preview">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <strong id="preview-title">File preview</strong>
+            <button id="attach-context" type="button" class="btn btn-outline-primary btn-sm" hidden>Attach to next question</button>
             <button id="close-preview" type="button" class="btn btn-outline-secondary btn-sm">Close preview</button>
           </div>
           <pre id="preview-code" class="border rounded p-3 bg-light mb-0" style="max-height:320px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere"></pre>
@@ -62,6 +63,10 @@
         </section>
         <div class="composer-wrap p-3 p-md-4">
           <form id="composer" class="mx-auto" style="max-width:850px">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span id="selected-file-context" class="small text-primary" aria-live="polite"></span>
+              <button id="remove-file-context" type="button" class="btn btn-link btn-sm" hidden>Remove attachment</button>
+            </div>
             <label for="prompt" class="form-label visually-hidden">Your question</label>
             <textarea id="prompt" class="form-control mb-2" rows="2" maxlength="20000" placeholder="Ask Mad Mallards Code anything…" required></textarea>
             <div class="d-flex align-items-center gap-2">

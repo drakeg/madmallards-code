@@ -40,3 +40,11 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Explicitly reject hidden files, known secrets, symlinks, traversal and large/binary files
 - Provide file preview in the web interface without execution or editing
 - Remaining: authorized workspace provisioning and isolated write-capable agent workers
+
+## MMC-009 — Explicit read-only file context (increment)
+
+- Attach one reviewed repository text file to a chat turn using a visible UI action
+- Server revalidates workspace path, extension and 24 KB attachment limit
+- File content sent as untrusted reference, not an executable agent instruction
+- Persistent user question remains separate from transient attached source text
+- No file editing or executable tool grants in this increment

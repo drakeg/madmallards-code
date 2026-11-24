@@ -4,6 +4,7 @@
   const select = $("workspace-select");
   const tree = $("workspace-tree");
   const status = $("file-browser-status");
+  let selectedContext = null;
   const pathLabel = $("workspace-path");
 
   async function get(url) {
@@ -31,6 +32,11 @@
     $("preview-title").textContent = select.value + " / " + data.path;
     $("preview-code").textContent = data.content;
     $("file-preview").hidden = false;
+    $("attach-context").hidden = false;
+    $("attach-context").disabled = false;
+    $("attach-context").textContent = "Attach to next question";
+    $("attach-context").dataset.workspace = select.value;
+    $("attach-context").dataset.path = path;
     status.textContent = "Previewing " + path;
   }
   async function browse(path = "") {
@@ -73,5 +79,28 @@
   }
   select.addEventListener("change", () => browse("").catch(showError));
   $("close-preview").addEventListener("click", () => { $("file-preview").hidden = true; });
+  $("attach-context").addEventListener("click", () => {
+    selectedContext = {
+      workspace: $("attach-context").dataset.workspace,
+      path: $("attach-context").dataset.path
+    };
+    $("selected-file-context").textContent = "Attached: " + selectedContext.workspace + "/" + selectedContext.path;
+    $("remove-file-context").hidden = false;
+  });
+  $("remove-file-context").addEventListener("click", () => {
+    selectedContext = null;
+    $("selected-file-context").textContent = "";
+    $("remove-file-context").hidden = true;
+  });
+  window.MMCContext = {
+    consume() {
+      const value = selectedContext;
+      selectedContext = null;
+      $("selected-file-context").textContent = "";
+      $("remove-file-context").hidden = true;
+      return value;
+    },
+    peek() { return selectedContext; }
+  };
   initialize().catch(showError);
 })();

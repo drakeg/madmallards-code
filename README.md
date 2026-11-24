@@ -78,3 +78,14 @@ The \`/api/v1/workspaces\` endpoints provide workspace listing, directory trees,
 and bounded text previews. This **does not grant the AI write or shell access**.
 Authentication and robust multi-user isolation are future requirements; keep
 the application bound to localhost.
+
+## Ask the AI about a repository file
+
+Use the sidebar workspace browser to preview an allowed text file, then select
+**Attach to next question**. The contents are transmitted to the configured
+local Ollama instance only when you submit that question; they are not silently
+included merely because you preview a file. Attachments are bounded to 24 KB.
+
+File content is treated as untrusted reference data. This is a read-only coding
+assistant increment, **not** a permission to modify files or execute commands.
+Do not attach confidential text to any provider you do not control.
