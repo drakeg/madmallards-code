@@ -97,3 +97,11 @@ replacement**. Edit the proposed text and select **Preview diff**. The API
 compares it with the original and returns a unified diff with a SHA-256
 staleness check. This is a **dry-run only**: there is no apply endpoint,
 and the repository mount remains read-only.
+
+## AI-generated file proposals
+
+In the file preview panel, enter the requested code change and choose
+**Generate AI diff**. The local model produces a candidate replacement, which
+is returned as a read-only diff after rechecking the file SHA-256 baseline.
+This does not grant file-editing access or execute model-generated commands.
+Model output is untrusted; review every line.

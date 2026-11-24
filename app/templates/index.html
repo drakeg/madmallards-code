@@ -57,6 +57,9 @@
             <summary>Draft a proposed replacement (no changes will be saved)</summary>
             <label class="form-label mt-2" for="proposal-content">Proposed file content</label>
             <textarea id="proposal-content" class="form-control font-monospace" rows="6" maxlength="131072"></textarea>
+            <label for="ai-change-request" class="form-label mt-3">Describe an AI-generated change</label>
+            <textarea id="ai-change-request" class="form-control" rows="2" maxlength="8000" placeholder="What should be changed?"></textarea>
+            <button id="ai-preview-proposal" type="button" class="btn btn-primary btn-sm mt-2">Generate AI diff</button>
             <button id="preview-proposal" type="button" class="btn btn-outline-primary btn-sm mt-2">Preview diff</button>
             <div id="proposal-status" role="status" class="small mt-2"></div>
             <pre id="proposal-diff" class="border rounded p-3 bg-light mt-2" style="max-height:320px;overflow:auto;white-space:pre-wrap" hidden></pre>
