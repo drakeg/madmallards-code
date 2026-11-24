@@ -5,12 +5,14 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from app.ai_proposals import router as ai_proposal_router
 from app.api_models import router as models_router
 from app.conversations import router as conversations_router
 from app.workspaces import router as workspaces_router
 
 app = FastAPI(title="Mad Mallards Code", version="0.1.0")
 app.include_router(models_router)
+app.include_router(ai_proposal_router)
 app.include_router(conversations_router)
 app.include_router(workspaces_router)
 app.mount('/static', StaticFiles(directory=str(Path(__file__).parent / 'static')), name='static')

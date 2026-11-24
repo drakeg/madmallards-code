@@ -55,3 +55,10 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Check SHA-256 baseline to reject stale edits and preserve source files
 - No apply endpoint, filesystem modification, or shell execution
 - Manual reviewer approval and isolated write-enabled workers remain future work
+
+## MMC-022 — Local AI-generated proposals
+
+- Selected local Ollama model generates proposed complete-file text on request
+- Source path and SHA-256 baseline checked before and after inference
+- No write/apply endpoint; model output shown only as a diff
+- Incomplete and oversized responses rejected

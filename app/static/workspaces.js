@@ -84,6 +84,39 @@
     }
     await browse();
   }
+  $("ai-preview-proposal").addEventListener("click", async () => {
+    if (!currentFile) return;
+    const instruction = $("ai-change-request").value.trim();
+    const model = $("model-select").value;
+    if (!instruction || !model) {
+      $("proposal-status").textContent = "Select a local model and describe your requested change.";
+      return;
+    }
+    const button = $("ai-preview-proposal");
+    button.disabled = true;
+    $("proposal-status").textContent = "Generating a read-only proposal…";
+    try {
+      const response = await fetch("/api/v1/workspaces/" +
+        encodeURIComponent(currentFile.workspace) + "/ai-proposal", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          path: currentFile.path, baseline_sha256: currentFile.sha256,
+          instruction, model
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || "Model proposal failed");
+      $("proposal-content").value = data.proposed_content;
+      $("proposal-diff").textContent = data.diff || "No changes";
+      $("proposal-diff").hidden = false;
+      $("proposal-status").textContent = "Review generated diff. No file was modified.";
+    } catch (error) {
+      $("proposal-status").textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
   $("preview-proposal").addEventListener("click", async () => {
     if (!currentFile) return;
     $("proposal-status").textContent = "Building read-only diff…";
