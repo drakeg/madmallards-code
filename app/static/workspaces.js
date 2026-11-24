@@ -6,6 +6,7 @@
   const status = $("file-browser-status");
   let selectedContext = null;
   const pathLabel = $("workspace-path");
+  let currentFile = null;
 
   async function get(url) {
     const response = await fetch(url);
@@ -29,6 +30,12 @@
   async function showFile(path) {
     const data = await get("/api/v1/workspaces/" + encodeURIComponent(select.value)
       + "/file?path=" + encodeURIComponent(path));
+    currentFile = data;
+    $("proposal-content").value = data.content;
+    $("proposal-diff").textContent = "";
+    $("proposal-diff").hidden = true;
+    $("proposal-status").textContent = "";
+    $("proposal-panel").open = false;
     $("preview-title").textContent = select.value + " / " + data.path;
     $("preview-code").textContent = data.content;
     $("file-preview").hidden = false;
@@ -77,6 +84,29 @@
     }
     await browse();
   }
+  $("preview-proposal").addEventListener("click", async () => {
+    if (!currentFile) return;
+    $("proposal-status").textContent = "Building read-only diff…";
+    try {
+      const response = await fetch("/api/v1/workspaces/" +
+        encodeURIComponent(currentFile.workspace) + "/proposals", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          path: currentFile.path,
+          baseline_sha256: currentFile.sha256,
+          proposed_content: $("proposal-content").value
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || "Unable to preview changes");
+      $("proposal-diff").textContent = data.diff || "No changes";
+      $("proposal-diff").hidden = false;
+      $("proposal-status").textContent = "Preview only — no file was modified.";
+    } catch (error) {
+      $("proposal-status").textContent = error.message;
+    }
+  });
   select.addEventListener("change", () => browse("").catch(showError));
   $("close-preview").addEventListener("click", () => { $("file-preview").hidden = true; });
   $("attach-context").addEventListener("click", () => {

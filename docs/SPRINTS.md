@@ -48,3 +48,10 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - File content sent as untrusted reference, not an executable agent instruction
 - Persistent user question remains separate from transient attached source text
 - No file editing or executable tool grants in this increment
+
+## MMC-009 — Reviewed change proposals (next increment)
+
+- Preview a proposed complete-file replacement as a unified diff
+- Check SHA-256 baseline to reject stale edits and preserve source files
+- No apply endpoint, filesystem modification, or shell execution
+- Manual reviewer approval and isolated write-enabled workers remain future work
