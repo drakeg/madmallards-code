@@ -114,7 +114,11 @@
       const response = await api("/api/v1/conversations/" + encodeURIComponent(state.conversationId) + "/messages", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({model: modelSelect.value, prompt: question}),
+        body: JSON.stringify({
+          model: modelSelect.value,
+          prompt: question,
+          context_file: window.MMCContext?.peek() || null
+        }),
         signal: controller.signal
       });
       const reader = response.body.getReader();
@@ -140,6 +144,7 @@
         }
       }
       if (!complete) throw new Error("Model stream ended unexpectedly");
+      window.MMCContext?.consume();
       announce("Response complete");
     } catch (error) {
       if (reply) reply.textContent += "\n" +
