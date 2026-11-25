@@ -26,3 +26,12 @@ The root `.dockerignore` uses an allowlist and includes only `requirements.txt`,
 `.env` files, credentials, `.git`, workspace snapshots, and local data.
 All Dockerfile COPY instructions must remain synchronized with this allowlist.
 The CI test `tests/test_docker_context.py` validates both.
+
+## Non-destructive Docker diagnostics
+
+Run `python3 scripts/diagnose_deployment.py` for bounded, read-only local
+checks. It probes Docker Engine (5 seconds), then local app HTTP health and
+only if the engine is responsive does it inspect project containers. The
+script never restarts the daemon, mutates containers, prints secret values,
+or changes volumes. If Docker commands time out, inspect Docker Desktop
+and other running workloads before considering any restart.
