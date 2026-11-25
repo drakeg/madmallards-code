@@ -18,3 +18,11 @@ This is a development foundation, not production-ready remote execution software
 MariaDB major upgrades must not be automated against an existing persistent volume.
 Keep 11.8 until a verified backup, restoration test, compatibility review, and
 explicit migration procedure are available. Renovate ignores MariaDB major upgrades.
+
+## Docker build context
+
+The root `.dockerignore` uses an allowlist and includes only `requirements.txt`,
+`app/`, `migrations/`, and `alembic.ini` in the build context. It excludes
+`.env` files, credentials, `.git`, workspace snapshots, and local data.
+All Dockerfile COPY instructions must remain synchronized with this allowlist.
+The CI test `tests/test_docker_context.py` validates both.
