@@ -97,3 +97,10 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - No database configuration changes and no committed secrets
 - Atomic writes, restrictive file permissions, and explicit rotation
 - Tests for missing `.env`, symlink handling and credential preservation
+
+## MMC-028 — Database user accounts and revocable sessions
+
+- Alembic migration adds users and auth_sessions without touching existing chats
+- Argon2 password hashes and short-lived opaque cookie tokens, server-side revocation
+- Explicit admin bootstrap/reset CLI; no credentials in .env or repository
+- Updated authentication regression tests and full Compose login smoke test

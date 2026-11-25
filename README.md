@@ -7,9 +7,9 @@ A self-hosted AI coding platform, built iteratively with Scrum.
 ## Quick start
 
 1. Copy `.env.example` to `.env` and **change both database passwords**.
-2. Run `python3 scripts/setup_access.py` to generate the login password and signing secret. Save the displayed password securely.
-3. Run `docker compose up --build -d`.
-4. Browse to `http://<mac-lan-ip>:8096` and sign in with the generated password.
+2. Run `docker compose up --build -d` to apply Alembic migrations.
+3. Run `docker compose exec -T app python -m app.bootstrap_admin --username admin` to create the first database-backed account; save its generated password.
+4. Browse to `http://<mac-lan-ip>:8096` and sign in with the generated username and password.
 5. Validate with `docker compose ps` and `curl http://localhost:8096/health`.
 
 The application listens across the trusted LAN by default, with password-protected
@@ -154,12 +154,11 @@ published to the host.
 ## LAN login protection
 
 The web UI, chat APIs, repository browser, and AI diff APIs require a
-password-protected signed session. The health endpoint remains public for
-Docker health checks. Set a unique `APP_ACCESS_PASSWORD` of at least 16
-characters and an independent `APP_SESSION_SECRET` of at least 32 characters
-in the ignored `.env` file. Compose refuses to start without either value,
-and the app fails closed if credentials are missing. Sessions expire after
-eight hours; use the **Sign out** control to end the session.
+MariaDB-backed login. Passwords are stored as Argon2 hashes, and only
+SHA-256 hashes of opaque session tokens are stored in MariaDB. A session
+expires after eight hours; **Sign out** deletes the server-side session.
+Bootstrap the first account using the CLI above. No user password or
+session-signing secret is configured through `.env`.
 
 The development site uses HTTP on a trusted LAN. Network traffic, including
 the login password and subsequent session cookie, is **not encrypted**.
@@ -168,13 +167,13 @@ networks. Set `APP_COOKIE_SECURE=1` only when serving through HTTPS.
 Never publish port 8096 to the public internet. The single shared password
 is not a substitute for multi-user permissions or production authentication.
 
-## Set up or rotate the LAN password
+## Database-backed login administration
 
-From the repository directory on the Mac, run `python3 scripts/setup_access.py`
-to generate unique credentials in the ignored `.env`. The utility preserves all
-existing database configuration, refuses symlinks, and restricts the file to
-owner-only permissions (`0600`). It displays the login password **once**.
-To replace an existing password, run `python3 scripts/setup_access.py --rotate`;
-that also invalidates previously signed sessions. Then run
-`docker compose up -d --build` to apply the new values. Do not commit or
-share `.env`, and don't use the same password for other services.
+After migrations, create the first administrator with:
+`docker compose exec -T app python -m app.bootstrap_admin --username admin`.
+Save the generated password securely; only its Argon2 hash is stored.
+For an explicit password reset (which also revokes sessions):
+`docker compose exec -T app python -m app.bootstrap_admin --username admin --rotate`.
+Existing projects, chats and other database records remain untouched.
+Never commit credentials. HTTP LAN traffic is not encrypted: use HTTPS or a VPN
+before exposing the application beyond a trusted network.

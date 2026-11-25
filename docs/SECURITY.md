@@ -44,12 +44,13 @@ with no router port forwarding. Set `APP_BIND_HOST=127.0.0.1` for local-only
 access. The MariaDB service remains internal to Docker's private network.
 Add authentication and access restrictions before production deployment.
 
-## Single-user LAN authentication
+## Database-backed authentication
 
-All application pages and APIs except `/health` and `/auth/login` are gated
-by a signed eight-hour HTTP-only, SameSite=Strict session cookie. There is a
-short per-IP failed-login throttle and an Origin check on state-changing
-browser requests. Both password and signing secret are provided only through
-ignored environment configuration. `APP_COOKIE_SECURE=1` is required for
-HTTPS, but cannot be used for ordinary HTTP LAN access. Do not mistake this
-for HTTPS, RBAC, or internet-safe production authentication.
+Users live in MariaDB with Argon2 hashed passwords and unique usernames.
+Sessions are revocable database rows containing only SHA-256 token digests,
+not bearer tokens. The login endpoint is throttled, state-changing requests
+perform an Origin check, and the cookie is HTTP-only with SameSite=Strict.
+The health endpoint is public for Docker health probes. Login data does not
+come from .env. Create/reset an admin with `python -m app.bootstrap_admin`
+after migrations. HTTP LAN access remains unencrypted; add HTTPS before
+internet-facing use. A shared workspace is not yet per-user isolated.

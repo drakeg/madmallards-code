@@ -1,66 +1,98 @@
-"""Password login protects browser, chat, workspace APIs and generated diffs."""
+"""Database-backed login tests including revocation and invalid credentials."""
+from datetime import timedelta
+
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import sessionmaker
 
 from app import auth, main
+from app.models import AuthSession, Base, User
 
 
 @pytest.fixture
-def client(monkeypatch):
-    monkeypatch.setenv("APP_ACCESS_PASSWORD", "test-admin-access-password-is-long")
-    monkeypatch.setenv("APP_SESSION_SECRET", "test-session-signing-secret-is-very-long")
-    monkeypatch.setattr(main, "configured", auth.configured)
+def client(tmp_path, monkeypatch):
+    engine = create_engine(f"sqlite:///{tmp_path / 'auth.db'}")
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, expire_on_commit=False)
+    with factory() as db:
+        db.add(User(
+            username="admin",
+            password_hash=auth.PASSWORDS.hash("temporary-test-password-12345"),
+            is_active=True, is_admin=True,
+        ))
+        db.commit()
+    monkeypatch.setattr(auth, "auth_session_factory", lambda: factory)
     monkeypatch.setattr(main, "authenticated", auth.authenticated)
     auth.FAILED_ATTEMPTS.clear()
-    with TestClient(main.app, follow_redirects=False) as test_client:
-        yield test_client
+    try:
+        with TestClient(main.app, follow_redirects=False) as test_client:
+            yield test_client, factory
+    finally:
+        engine.dispose()
 
 
 def test_unauthed_routes_are_restricted(client):
-    assert client.get("/health").status_code == 200
-    assert client.get("/").status_code == 303
-    assert client.get("/").headers["location"] == "/auth/login"
-    assert client.get("/docs").status_code == 303
-    assert client.get("/api/v1/workspaces").status_code == 401
-    assert client.get("/api/v1/conversations").status_code == 401
-    assert client.post("/api/v1/models/chat", json={}).status_code == 401
-    assert client.get("/auth/login").status_code == 200
+    http, _ = client
+    assert http.get("/health").status_code == 200
+    assert http.get("/").status_code == 303
+    assert http.get("/").headers["location"] == "/auth/login"
+    assert http.get("/docs").status_code == 303
+    assert http.get("/api/v1/workspaces").status_code == 401
+    assert http.get("/api/v1/conversations").status_code == 401
+    assert http.post("/api/v1/models/chat", json={}).status_code == 401
+    assert 'name="username"' in http.get("/auth/login").text
 
 
-def test_login_cookie_and_logout(client):
-    bad = client.post("/auth/login", json={"password": "wrong"})
-    assert bad.status_code == 401
-    good = client.post(
-        "/auth/login", json={"password": "test-admin-access-password-is-long"}
-    )
-    assert good.status_code == 200
-    assert good.json()["authenticated"] is True
-    assert "httponly" in good.headers["set-cookie"].lower()
-    assert "samesite=strict" in good.headers["set-cookie"].lower()
-    assert client.get("/").status_code == 200
-    assert client.get("/api/v1/workspaces").status_code == 200
-    assert client.post("/auth/logout").status_code == 200
-    assert client.get("/api/v1/workspaces").status_code == 401
+def test_login_persists_revocable_hashed_token(client):
+    http, factory = client
+    assert http.post("/auth/login", json={"username": "admin", "password": "wrong"}).status_code == 401
+    response = http.post("/auth/login", json={
+        "username": "admin", "password": "temporary-test-password-12345",
+    })
+    assert response.status_code == 200
+    assert response.json()["username"] == "admin"
+    assert "httponly" in response.headers["set-cookie"].lower()
+    assert "samesite=strict" in response.headers["set-cookie"].lower()
+    token = http.cookies.get("mmc_session")
+    with factory() as db:
+        stored = db.scalar(select(AuthSession))
+        assert stored is not None
+        assert stored.token_hash == auth.token_digest(token)
+        assert token != stored.token_hash
+    assert http.get("/").status_code == 200
+    assert http.get("/api/v1/workspaces").status_code == 200
+    assert http.post("/auth/logout").status_code == 200
+    assert http.get("/api/v1/workspaces").status_code == 401
+    with factory() as db:
+        assert db.scalar(select(AuthSession)) is None
 
 
-def test_rate_limit_and_invalid_origin(client):
+def test_rate_limit_expiry_and_invalid_origin(client):
+    http, factory = client
     for _ in range(5):
-        assert client.post("/auth/login", json={"password": "wrong"}).status_code == 401
-    assert client.post(
-        "/auth/login", json={"password": "test-admin-access-password-is-long"}
-    ).status_code == 429
+        assert http.post("/auth/login", json={"username": "admin", "password": "wrong"}).status_code == 401
+    assert http.post("/auth/login", json={"username": "admin", "password": "temporary-test-password-12345"}).status_code == 429
     auth.FAILED_ATTEMPTS.clear()
-    assert client.post(
-        "/auth/login", json={"password": "test-admin-access-password-is-long"}
-    ).status_code == 200
-    assert client.post(
-        "/auth/logout", headers={"Origin": "http://other-host:8096"}
-    ).status_code == 403
-    assert client.get("/api/v1/workspaces").status_code == 200
+    assert http.post("/auth/login", json={"username": "admin", "password": "temporary-test-password-12345"}).status_code == 200
+    assert http.post("/auth/logout", headers={"Origin": "http://other-host:8096"}).status_code == 403
+    assert http.get("/api/v1/workspaces").status_code == 200
+    with factory() as db:
+        stored = db.scalar(select(AuthSession))
+        stored.expires_at = auth.utc_naive() - timedelta(seconds=1)
+        db.commit()
+    assert http.get("/api/v1/workspaces").status_code == 401
 
 
-def test_missing_configuration_fails_closed(client, monkeypatch):
-    monkeypatch.delenv("APP_SESSION_SECRET")
-    assert client.get("/api/v1/workspaces").status_code == 503
-    assert client.get("/").status_code == 503
-    assert client.post("/auth/login", json={"password": "wrong"}).status_code == 503
+def test_disabled_account_and_unknown_user(client):
+    http, factory = client
+    assert http.post("/auth/login", json={
+        "username": "missing", "password": "temporary-test-password-12345",
+    }).status_code == 401
+    with factory() as db:
+        user = db.scalar(select(User).where(User.username == "admin"))
+        user.is_active = False
+        db.commit()
+    assert http.post("/auth/login", json={
+        "username": "admin", "password": "temporary-test-password-12345",
+    }).status_code == 401
