@@ -22,3 +22,10 @@ def test_dockerfile_only_copies_allowlisted_inputs():
         "COPY migrations ./migrations",
         "COPY alembic.ini .",
     ]
+
+
+def test_compose_supports_lan_binding_without_exposing_database():
+    compose = (ROOT / "compose.yaml").read_text()
+    assert '${APP_BIND_HOST:-0.0.0.0}:${APP_PORT:-8096}:8000' in compose
+    db_section = compose.split("  db:\n", 1)[1].split("volumes:\n", 1)[0]
+    assert "    ports:" not in db_section

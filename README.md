@@ -135,3 +135,18 @@ After generating or editing a proposed diff, select **Download reviewed .patch**
 This downloads the unified diff to your browser without modifying repository files.
 Review the patch and use `git apply --check <filename>.patch` in a trusted local
 repository before any manual application. Never apply unreviewed AI-generated code.
+
+## Access from other devices on your local network
+
+Docker Compose publishes the web interface to all host interfaces by default
+(`APP_BIND_HOST=0.0.0.0`). Find the Docker host's LAN IPv4 address and browse
+to `http://<host-lan-ip>:8096` from any device on the same trusted network.
+Use `APP_PORT` to customize the port. Use `APP_BIND_HOST=127.0.0.1` in your
+local `.env` to disable LAN access.
+
+**Security:** This is currently an unauthenticated single-user development
+service. All LAN clients can read workspace previews, create chats and call
+the local model. Do not forward the port on your router or expose it to the
+internet, public Wi-Fi, or other untrusted networks. Authentication and
+access controls are required before wider deployment. MariaDB is not
+published to the host.

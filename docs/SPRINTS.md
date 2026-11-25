@@ -76,3 +76,10 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Download the current reviewed unified diff as a patch file
 - Hide stale patch download after navigating to another file or a failed preview
 - Never automatically apply or execute the downloaded patch
+
+## LAN accessibility
+
+- Configurable `APP_BIND_HOST`, default all interfaces for LAN testing
+- Keep MariaDB container-only and retain named volume
+- Validate binding and health from host LAN IP
+- Backlog: mandatory authentication for any shared or internet deployment

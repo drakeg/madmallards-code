@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "127.0.0.1:${APP_PORT:-8096}:8000"
+      - "${APP_BIND_HOST:-0.0.0.0}:${APP_PORT:-8096}:8000"
     environment:
       WORKSPACES_ROOT: /workspaces
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
