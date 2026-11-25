@@ -1,0 +1,19 @@
+# Build context allowlist: only files explicitly needed by Dockerfile
+**
+!requirements.txt
+!app/
+!app/**
+!migrations/
+!migrations/**
+!alembic.ini
+# Never send local runtime data or secrets
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/id_rsa
+**/id_ed25519
+**/.git/
+**/__pycache__/
+**/*.pyc
+**/.DS_Store

@@ -105,3 +105,12 @@ In the file preview panel, enter the requested code change and choose
 is returned as a read-only diff after rechecking the file SHA-256 baseline.
 This does not grant file-editing access or execute model-generated commands.
 Model output is untrusted; review every line.
+
+## Docker build safety
+
+Build context is restricted to runtime source, migrations, and requirements by
+`.dockerignore`. Never commit credentials into runtime source or mount local
+workspace credentials into an unauthenticated web app. To diagnose Docker
+Desktop failures, use `docker info`, `docker compose ps`, and targeted Compose
+logs, each with a timeout; do not delete volumes or restart the Docker engine
+without checking other running workloads.
