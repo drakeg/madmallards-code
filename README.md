@@ -150,3 +150,20 @@ the local model. Do not forward the port on your router or expose it to the
 internet, public Wi-Fi, or other untrusted networks. Authentication and
 access controls are required before wider deployment. MariaDB is not
 published to the host.
+
+## LAN login protection
+
+The web UI, chat APIs, repository browser, and AI diff APIs require a
+password-protected signed session. The health endpoint remains public for
+Docker health checks. Set a unique `APP_ACCESS_PASSWORD` of at least 16
+characters and an independent `APP_SESSION_SECRET` of at least 32 characters
+in the ignored `.env` file. Compose refuses to start without either value,
+and the app fails closed if credentials are missing. Sessions expire after
+eight hours; use the **Sign out** control to end the session.
+
+The development site uses HTTP on a trusted LAN. Network traffic, including
+the login password and subsequent session cookie, is **not encrypted**.
+Use HTTPS via a trusted reverse proxy or VPN before using it on untrusted
+networks. Set `APP_COOKIE_SECURE=1` only when serving through HTTPS.
+Never publish port 8096 to the public internet. The single shared password
+is not a substitute for multi-user permissions or production authentication.

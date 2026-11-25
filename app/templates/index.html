@@ -14,6 +14,7 @@
   <nav class="navbar navbar-dark bg-dark px-3" aria-label="Primary">
     <a class="navbar-brand fw-bold" href="/">Mad Mallards Code</a>
     <span class="navbar-text text-white-50 small">Local AI workspace · Chat MVP</span>
+    <button type="button" id="logout-button" class="btn btn-outline-light btn-sm ms-2">Sign out</button>
   </nav>
   <div class="container-fluid shell">
     <div class="row">
@@ -92,5 +93,9 @@
       </main>
     </div>
   </div>
+  <script>document.getElementById('logout-button').addEventListener('click', async () => {
+    await fetch('/auth/logout', {method:'POST'});
+    window.location.assign('/auth/login');
+  });</script>
 </body>
 </html>
