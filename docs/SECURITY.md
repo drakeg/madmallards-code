@@ -35,3 +35,11 @@ only if the engine is responsive does it inspect project containers. The
 script never restarts the daemon, mutates containers, prints secret values,
 or changes volumes. If Docker commands time out, inspect Docker Desktop
 and other running workloads before considering any restart.
+
+## Local-network listening
+
+The app's Compose binding defaults to `APP_BIND_HOST=0.0.0.0` to support
+LAN testing. This does not add authentication: only use on trusted networks,
+with no router port forwarding. Set `APP_BIND_HOST=127.0.0.1` for local-only
+access. The MariaDB service remains internal to Docker's private network.
+Add authentication and access restrictions before production deployment.
