@@ -7,6 +7,7 @@
   let selectedContext = null;
   const pathLabel = $("workspace-path");
   let currentFile = null;
+  let reviewedDiff = "";
 
   async function get(url) {
     const response = await fetch(url);
@@ -31,6 +32,8 @@
     const data = await get("/api/v1/workspaces/" + encodeURIComponent(select.value)
       + "/file?path=" + encodeURIComponent(path));
     currentFile = data;
+    reviewedDiff = "";
+    $("download-proposal-patch").hidden = true;
     $("proposal-content").value = data.content;
     $("proposal-diff").textContent = "";
     $("proposal-diff").hidden = true;
@@ -49,6 +52,10 @@
   async function browse(path = "") {
     const workspace = select.value;
     tree.replaceChildren();
+    currentFile = null;
+    reviewedDiff = "";
+    $("download-proposal-patch").hidden = true;
+    $("file-preview").hidden = true;
     pathLabel.textContent = workspace ? "/" + workspace + (path ? "/" + path : "") : "";
     if (!workspace) return;
     const data = await get("/api/v1/workspaces/" + encodeURIComponent(workspace)
@@ -108,10 +115,14 @@
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || "Model proposal failed");
       $("proposal-content").value = data.proposed_content;
-      $("proposal-diff").textContent = data.diff || "No changes";
+      reviewedDiff = data.diff || "";
+      $("download-proposal-patch").hidden = !reviewedDiff;
+      $("proposal-diff").textContent = reviewedDiff || "No changes";
       $("proposal-diff").hidden = false;
       $("proposal-status").textContent = "Review generated diff. No file was modified.";
     } catch (error) {
+      reviewedDiff = "";
+      $("download-proposal-patch").hidden = true;
       $("proposal-status").textContent = error.message;
     } finally {
       button.disabled = false;
@@ -133,12 +144,31 @@
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || "Unable to preview changes");
-      $("proposal-diff").textContent = data.diff || "No changes";
+      reviewedDiff = data.diff || "";
+      $("download-proposal-patch").hidden = !reviewedDiff;
+      $("proposal-diff").textContent = reviewedDiff || "No changes";
       $("proposal-diff").hidden = false;
       $("proposal-status").textContent = "Preview only — no file was modified.";
     } catch (error) {
+      reviewedDiff = "";
+      $("download-proposal-patch").hidden = true;
       $("proposal-status").textContent = error.message;
     }
+  });
+  $("download-proposal-patch").addEventListener("click", () => {
+    if (!currentFile || !reviewedDiff) return;
+    const filename = (currentFile.workspace + "_" + currentFile.path)
+      .replace(/[^a-zA-Z0-9._-]/g, "_") + ".patch";
+    const blob = new Blob([reviewedDiff], {type: "text/x-patch;charset=utf-8"});
+    const href = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(href), 1000);
+    $("proposal-status").textContent = "Patch downloaded. Review and validate before applying it manually.";
   });
   select.addEventListener("change", () => browse("").catch(showError));
   $("close-preview").addEventListener("click", () => { $("file-preview").hidden = true; });

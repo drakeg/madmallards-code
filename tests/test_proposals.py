@@ -1,5 +1,6 @@
 """Dry-run diff proposals must not change actual workspace files."""
 import hashlib
+import subprocess
 
 import pytest
 from fastapi.testclient import TestClient
@@ -41,6 +42,11 @@ def test_diff_preview_is_read_only(client):
     assert "-answer = 1" in body["diff"]
     assert "+answer = 2" in body["diff"]
     assert (repo / "main.py").read_text() == original
+    check = subprocess.run(
+        ["git", "apply", "--check", "-"], input=body["diff"], text=True,
+        cwd=repo, capture_output=True, check=False,
+    )
+    assert check.returncode == 0, check.stderr
 
     same = http.post("/api/v1/workspaces/demo/proposals", json={
         "path": "main.py", "baseline_sha256": sha, "proposed_content": original
@@ -80,3 +86,14 @@ def test_input_bounded(client):
         "proposed_content": "x" * (128 * 1024 + 1),
     })
     assert result.status_code == 422
+
+
+def test_download_control_is_present_and_does_not_write(client):
+    http, repo = client
+    assert 'id="download-proposal-patch"' in http.get("/").text
+    asset = http.get("/static/workspaces.js")
+    assert asset.status_code == 200
+    assert 'reviewedDiff' in asset.text
+    assert 'URL.createObjectURL(blob)' in asset.text
+    assert '".patch"' in asset.text
+    assert (repo / "main.py").read_text() == "answer = 1\n"

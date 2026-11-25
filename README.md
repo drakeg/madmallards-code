@@ -128,3 +128,10 @@ The `compose-smoke` CI job builds both application images, brings up an isolated
 MariaDB + app stack on an ephemeral GitHub runner, and checks the homepage,
 health endpoint and workspace API. It never operates on local Docker Desktop,
 so a successful check does **not** mean the Mac deployment is healthy.
+
+## Export a reviewed patch
+
+After generating or editing a proposed diff, select **Download reviewed .patch**.
+This downloads the unified diff to your browser without modifying repository files.
+Review the patch and use `git apply --check <filename>.patch` in a trusted local
+repository before any manual application. Never apply unreviewed AI-generated code.
