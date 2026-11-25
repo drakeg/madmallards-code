@@ -4,8 +4,6 @@ services:
     ports:
       - "${APP_BIND_HOST:-0.0.0.0}:${APP_PORT:-8096}:8000"
     environment:
-      APP_ACCESS_PASSWORD: ${APP_ACCESS_PASSWORD:?Set APP_ACCESS_PASSWORD (minimum 16 characters)}
-      APP_SESSION_SECRET: ${APP_SESSION_SECRET:?Set APP_SESSION_SECRET (minimum 32 characters)}
       APP_COOKIE_SECURE: ${APP_COOKIE_SECURE:-0}
       WORKSPACES_ROOT: /workspaces
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}

@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.ai_proposals import router as ai_proposal_router
 from app.api_models import router as models_router
-from app.auth import authenticated, configured
+from app.auth import authenticated
 from app.auth import router as auth_router
 from app.conversations import router as conversations_router
 from app.workspaces import router as workspaces_router
@@ -20,8 +20,6 @@ async def require_login(request: Request, call_next):
     # Docker health probes are intentionally unauthenticated.
     if request.url.path == "/health" or request.url.path in {"/auth/login", "/favicon.ico"}:
         return await call_next(request)
-    if not configured():
-        return JSONResponse({"detail": "Authentication is not configured"}, status_code=503)
     if not authenticated(request):
         if request.url.path.startswith("/api/") or request.method != "GET":
             return JSONResponse({"detail": "Authentication required"}, status_code=401)
