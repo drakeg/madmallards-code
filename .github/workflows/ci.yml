@@ -20,6 +20,8 @@ jobs:
         env:
           DB_PASSWORD: ci-placeholder
           DB_ROOT_PASSWORD: ci-placeholder
+          APP_ACCESS_PASSWORD: ci-access-password-123456789
+          APP_SESSION_SECRET: ci-session-secret-abcdefghijklmnopqrstuvwxyz
   compose-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -27,6 +29,8 @@ jobs:
       DB_PASSWORD: ci-placeholder-only
       DB_ROOT_PASSWORD: ci-root-placeholder-only
       APP_PORT: '8096'
+      APP_ACCESS_PASSWORD: ci-access-password-123456789
+      APP_SESSION_SECRET: ci-session-secret-abcdefghijklmnopqrstuvwxyz
     steps:
       - uses: actions/checkout@v7
       - name: Validate Compose and build app images
@@ -38,8 +42,11 @@ jobs:
       - name: Verify HTTP API and page
         run: |
           curl --retry 30 --retry-delay 2 --retry-connrefused --retry-all-errors --fail --silent --show-error http://127.0.0.1:8096/health | grep '"status":"ok"'
-          curl --fail --silent --show-error http://127.0.0.1:8096/ | grep 'id="composer"'
-          curl --fail --silent --show-error http://127.0.0.1:8096/api/v1/workspaces | grep '"workspaces"'
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8096/api/v1/workspaces)" = "401"
+          curl -fsS -c /tmp/mmc-cookies -H 'Content-Type: application/json' \
+            -d '{"password":"ci-access-password-123456789"}' http://127.0.0.1:8096/auth/login | grep 'authenticated'
+          curl --fail --silent --show-error -b /tmp/mmc-cookies http://127.0.0.1:8096/ | grep 'id="composer"'
+          curl --fail --silent --show-error -b /tmp/mmc-cookies http://127.0.0.1:8096/api/v1/workspaces | grep '"workspaces"'
       - name: Show targeted logs on failure
         if: failure()
         run: |

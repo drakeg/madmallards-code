@@ -43,3 +43,13 @@ LAN testing. This does not add authentication: only use on trusted networks,
 with no router port forwarding. Set `APP_BIND_HOST=127.0.0.1` for local-only
 access. The MariaDB service remains internal to Docker's private network.
 Add authentication and access restrictions before production deployment.
+
+## Single-user LAN authentication
+
+All application pages and APIs except `/health` and `/auth/login` are gated
+by a signed eight-hour HTTP-only, SameSite=Strict session cookie. There is a
+short per-IP failed-login throttle and an Origin check on state-changing
+browser requests. Both password and signing secret are provided only through
+ignored environment configuration. `APP_COOKIE_SECURE=1` is required for
+HTTPS, but cannot be used for ordinary HTTP LAN access. Do not mistake this
+for HTTPS, RBAC, or internet-safe production authentication.

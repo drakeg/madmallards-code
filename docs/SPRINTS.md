@@ -83,3 +83,10 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Keep MariaDB container-only and retain named volume
 - Validate binding and health from host LAN IP
 - Backlog: mandatory authentication for any shared or internet deployment
+
+## MMC-026 — LAN access protection
+
+- Fail-closed single-user password gate for browser and APIs
+- Signed, time-limited HTTP-only session, logout, login throttling
+- Authentication smoke checks in CI and negative security tests
+- Next backlog: HTTPS termination and individual user accounts
