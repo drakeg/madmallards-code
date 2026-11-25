@@ -121,3 +121,10 @@ Run `python3 scripts/diagnose_deployment.py` on the Docker host. The report
 identifies whether Docker Engine, the project containers, and the app health
 endpoint respond within explicit timeouts. This does not modify or restart
 containers; protect MariaDB data and unrelated running stacks during recovery.
+
+## Integration checks in GitHub Actions
+
+The `compose-smoke` CI job builds both application images, brings up an isolated
+MariaDB + app stack on an ephemeral GitHub runner, and checks the homepage,
+health endpoint and workspace API. It never operates on local Docker Desktop,
+so a successful check does **not** mean the Mac deployment is healthy.
