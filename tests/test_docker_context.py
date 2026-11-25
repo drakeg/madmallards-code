@@ -1,4 +1,5 @@
 """Guard against local secrets entering the Docker build context."""
+
 from pathlib import Path
 
 
