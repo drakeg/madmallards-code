@@ -70,3 +70,9 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Verify HTTP health, browser composer markup and workspace API
 - Bound build/start/log/cleanup operations to avoid indefinite CI hangs
 - Preserve all volumes on the user's local Docker host (CI only)
+
+## MMC-025 — Export reviewed patches
+
+- Download the current reviewed unified diff as a patch file
+- Hide stale patch download after navigating to another file or a failed preview
+- Never automatically apply or execute the downloaded patch
