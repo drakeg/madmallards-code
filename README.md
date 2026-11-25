@@ -1,5 +1,8 @@
 # Mad Mallards Code
 
+[![License](https://img.shields.io/github/license/drakeg/madmallards-code)](https://github.com/drakeg/madmallards-code/blob/main/LICENSE)
+
+
 A self-hosted AI coding platform, built iteratively with Scrum.
 
 **Status:** Sprint 1 foundation. No AI model calls or code-execution agent functionality yet.
