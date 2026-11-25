@@ -62,3 +62,11 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Source path and SHA-256 baseline checked before and after inference
 - No write/apply endpoint; model output shown only as a diff
 - Incomplete and oversized responses rejected
+
+## MMC-024 — Docker Compose integration smoke test
+
+- Build and start the actual FastAPI + MariaDB stack on an ephemeral CI runner
+- Confirm Alembic migrations complete before app becomes healthy
+- Verify HTTP health, browser composer markup and workspace API
+- Bound build/start/log/cleanup operations to avoid indefinite CI hangs
+- Preserve all volumes on the user's local Docker host (CI only)

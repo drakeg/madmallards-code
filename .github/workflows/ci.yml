@@ -20,3 +20,31 @@ jobs:
         env:
           DB_PASSWORD: ci-placeholder
           DB_ROOT_PASSWORD: ci-placeholder
+  compose-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      DB_PASSWORD: ci-placeholder-only
+      DB_ROOT_PASSWORD: ci-root-placeholder-only
+      APP_PORT: '8096'
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate Compose and build app images
+        run: |
+          docker compose config --quiet
+          timeout 240 docker compose build app migrate
+      - name: Start complete application stack
+        run: timeout 180 docker compose up -d --no-build
+      - name: Verify HTTP API and page
+        run: |
+          curl --retry 30 --retry-delay 2 --retry-connrefused --fail --silent --show-error http://127.0.0.1:8096/health | grep '"status":"ok"'
+          curl --fail --silent --show-error http://127.0.0.1:8096/ | grep 'id="composer"'
+          curl --fail --silent --show-error http://127.0.0.1:8096/api/v1/workspaces | grep '"workspaces"'
+      - name: Show targeted logs on failure
+        if: failure()
+        run: |
+          timeout 20 docker compose ps --all || true
+          timeout 20 docker compose logs --tail=80 app migrate db || true
+      - name: Stop CI stack safely
+        if: always()
+        run: timeout 40 docker compose down --remove-orphans || true
