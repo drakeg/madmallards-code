@@ -114,3 +114,10 @@ workspace credentials into an unauthenticated web app. To diagnose Docker
 Desktop failures, use `docker info`, `docker compose ps`, and targeted Compose
 logs, each with a timeout; do not delete volumes or restart the Docker engine
 without checking other running workloads.
+
+## Troubleshoot localhost:8096 safely
+
+Run `python3 scripts/diagnose_deployment.py` on the Docker host. The report
+identifies whether Docker Engine, the project containers, and the app health
+endpoint respond within explicit timeouts. This does not modify or restart
+containers; protect MariaDB data and unrelated running stacks during recovery.
