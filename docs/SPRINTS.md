@@ -90,3 +90,10 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Signed, time-limited HTTP-only session, logout, login throttling
 - Authentication smoke checks in CI and negative security tests
 - Next backlog: HTTPS termination and individual user accounts
+
+## MMC-027 — Access credential bootstrap
+
+- One-command local password/signing-secret generation
+- No database configuration changes and no committed secrets
+- Atomic writes, restrictive file permissions, and explicit rotation
+- Tests for missing `.env`, symlink handling and credential preservation

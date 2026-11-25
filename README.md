@@ -7,13 +7,13 @@ A self-hosted AI coding platform, built iteratively with Scrum.
 ## Quick start
 
 1. Copy `.env.example` to `.env` and **change both database passwords**.
-2. Run `docker compose up --build -d`.
-3. Compose runs Alembic migrations before starting the application.
-4. Visit http://localhost:8096 (or the configured APP_PORT).
+2. Run `python3 scripts/setup_access.py` to generate the login password and signing secret. Save the displayed password securely.
+3. Run `docker compose up --build -d`.
+4. Browse to `http://<mac-lan-ip>:8096` and sign in with the generated password.
 5. Validate with `docker compose ps` and `curl http://localhost:8096/health`.
 
-The application listens on loopback by default. Do not expose it publicly until authentication,
-authorization, execution isolation, and access controls are implemented.
+The application listens across the trusted LAN by default, with password-protected
+browser and API endpoints. HTTP is unencrypted; do not expose it to the internet.
 
 ## Development
 
@@ -167,3 +167,14 @@ Use HTTPS via a trusted reverse proxy or VPN before using it on untrusted
 networks. Set `APP_COOKIE_SECURE=1` only when serving through HTTPS.
 Never publish port 8096 to the public internet. The single shared password
 is not a substitute for multi-user permissions or production authentication.
+
+## Set up or rotate the LAN password
+
+From the repository directory on the Mac, run `python3 scripts/setup_access.py`
+to generate unique credentials in the ignored `.env`. The utility preserves all
+existing database configuration, refuses symlinks, and restricts the file to
+owner-only permissions (`0600`). It displays the login password **once**.
+To replace an existing password, run `python3 scripts/setup_access.py --rotate`;
+that also invalidates previously signed sessions. Then run
+`docker compose up -d --build` to apply the new values. Do not commit or
+share `.env`, and don't use the same password for other services.
