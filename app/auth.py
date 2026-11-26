@@ -64,15 +64,28 @@ def login_page() -> HTMLResponse:
         """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sign in — Mad Mallards Code</title>
-<style>body{font:16px system-ui,sans-serif;background:#172134;color:#202c3e;
-display:grid;min-height:100vh;place-items:center;margin:0;padding:18px;box-sizing:border-box}
-main{background:white;border-radius:14px;padding:32px;width:min(100%,410px);
-box-shadow:0 18px 60px #09101c80}h1{font-size:1.5rem}
-input,button{box-sizing:border-box;width:100%;font:inherit;border-radius:8px;
-padding:12px;margin:10px 0}input{border:1px solid #a5b0c2}
-button{background:#145bd7;color:white;border:0;cursor:pointer}
-small{color:#5b6779}#status{color:#a32121;min-height:1.4em}</style></head>
-<body><main><h1>Mad Mallards Code</h1><p>Sign in to your account.</p>
+<style>
+:root{color-scheme:light;--night:#0e1724;--mint:#b8f5d5;--line:#dce5e9;--ink:#152332}
+*{box-sizing:border-box}body{font:16px system-ui,-apple-system,"Segoe UI",sans-serif;
+background:radial-gradient(circle at 10% 14%,#25493f 0,transparent 31%),var(--night);
+color:var(--ink);min-height:100dvh;display:grid;place-items:center;margin:0;padding:20px}
+main{width:min(100%,430px);padding:36px;background:#fff;border-radius:19px;
+box-shadow:0 25px 90px #0005}h1{font-size:1.75rem;letter-spacing:-.045em;margin:20px 0 8px}
+.brand-mark{display:grid;place-items:center;width:46px;height:46px;background:var(--mint);
+border-radius:12px;font-size:24px;font-weight:900;color:#0d4937}
+.eyebrow{display:block;color:#246653;font-size:.68rem;font-weight:800;letter-spacing:.16em;margin-top:15px}
+p{color:#506575;line-height:1.55}label{display:block;color:#263f4c;font-size:.85rem;font-weight:700;margin-top:17px}
+input,button{width:100%;font:inherit;border-radius:10px;padding:12px 14px;margin-top:7px}
+input{border:1px solid #b7cbd1;background:#fbfdfd;color:#172c39}
+input:focus{outline:3px solid #63b99b88;outline-offset:2px;border-color:#176e58}
+button{background:#146e56;color:white;border:1px solid #146e56;cursor:pointer;font-weight:750;margin-top:23px}
+button:hover{background:#0c5944}button:disabled{opacity:.7;cursor:wait}
+button:focus-visible{outline:3px solid #56b994;outline-offset:3px}
+small{color:#556b78;display:block;font-size:.75rem;line-height:1.65;border-top:1px solid var(--line);padding-top:18px}
+#status{color:#9f2424;min-height:1.4em;font-size:.88rem}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style></head>
+<body><main><span class="brand-mark" aria-hidden="true">M·</span><span class="eyebrow">MAD MALLARDS / CODE</span><h1>Welcome back.</h1><p>Sign in to your local AI workbench.</p>
 <form id="login">
 <label for="username">Username</label>
 <input id="username" name="username" autocomplete="username" maxlength="64" required autofocus>

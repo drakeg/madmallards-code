@@ -223,3 +223,12 @@ or write access. Docker sandboxes reduce risk but are not a security boundary
 against all kernel exploits; do not run untrusted code on sensitive machines
 without further isolation. Future work: temporary copy-on-write workspaces,
 pytest image support, and an explicit UI approval workflow.
+
+## Workbench interface
+
+The UI follows the bespoke design tokens in [`docs/BRAND.md`](docs/BRAND.md),
+with a developer-focused workspace rail, responsive model toolbar, code-reading
+surfaces and prompt starter cards. The underlying Bootstrap 5 and authenticated
+APIs are unchanged. On small screens, use **Explore** to open the repository rail;
+press Escape to close it. Use Cmd/Ctrl+K to start a conversation. Suggested
+prompts populate the composer but never submit or contact Ollama automatically.
