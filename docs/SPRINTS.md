@@ -121,3 +121,12 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Keep the application mount read-only and credentials outside source control
 - Add tests for input safety, non-overwrite, failure cleanup and timeout
 - Remaining: authorized private repositories, authenticated GUI provisioning
+
+## MMC-010 — Restricted host-side test runner increment
+
+- One fixed Python unittest discovery command, not arbitrary shell execution
+- Disposable container, network disabled, non-root, read-only repo mount
+- CPU/memory/PID limits, reduced privileges and execution timeout
+- Validate workspace location and forbid symlink workspaces
+- Fail closed on absent tests, timeouts, missing Docker or test errors
+- Remaining: isolated writable agent worker and authenticated approval UI

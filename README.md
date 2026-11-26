@@ -205,3 +205,21 @@ interactive credentials, does not initialize submodules or use custom Git
 hooks, times out after 120 seconds, and will not overwrite an existing
 workspace. It does not grant the model file-write or shell access. Do not
 import untrusted repositories for execution; files are reference data only.
+
+## Sandboxed Python tests (MMC-010)
+
+On the trusted Docker host, run `python3 scripts/run_isolated_tests.py <workspace>`
+to execute the selected workspace's `unittest` test discovery in a disposable
+Python 3.15 container. The image must already be present locally (`docker pull
+python:3.15-slim` once, if required). This CLI is **not** exposed as an HTTP
+endpoint and never mounts the Docker socket into the application. It binds
+only the selected workspace **read-only**, disables networking, runs as an
+unprivileged user with all capabilities dropped, limits CPU/memory/processes,
+and enforces a 90-second timeout. It rejects zero discovered tests.
+
+Only Python standard-library `unittest` suites are supported initially.
+There is no generic shell-command execution, pip install, privileged mode,
+or write access. Docker sandboxes reduce risk but are not a security boundary
+against all kernel exploits; do not run untrusted code on sensitive machines
+without further isolation. Future work: temporary copy-on-write workspaces,
+pytest image support, and an explicit UI approval workflow.
