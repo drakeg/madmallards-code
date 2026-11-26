@@ -104,3 +104,11 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Argon2 password hashes and short-lived opaque cookie tokens, server-side revocation
 - Explicit admin bootstrap/reset CLI; no credentials in .env or repository
 - Updated authentication regression tests and full Compose login smoke test
+
+## MMC-011 — Public GitHub status increment
+
+- Show public repository metadata, branches, open PRs and recent CI conclusions
+- Validate owner/repo, limit response sizes and restrict upstream to GitHub API
+- Do not require tokens, credentials, repository writes or other GitHub permissions
+- Add mocked HTTP tests including rate-limit, missing repo and invalid input
+- Remaining: authorized private repos and state-changing PR/branch workflows

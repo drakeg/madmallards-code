@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app.ai_proposals import router as ai_proposal_router
+from app.github_status import router as github_router
 from app.api_models import router as models_router
 from app.auth import authenticated
 from app.auth import router as auth_router
@@ -38,6 +39,7 @@ async def require_login(request: Request, call_next):
 app.include_router(auth_router)
 app.include_router(models_router)
 app.include_router(ai_proposal_router)
+app.include_router(github_router)
 app.include_router(conversations_router)
 app.include_router(workspaces_router)
 app.mount('/static', StaticFiles(directory=str(Path(__file__).parent / 'static')), name='static')

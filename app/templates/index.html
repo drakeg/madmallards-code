@@ -9,6 +9,7 @@
   <link href="/static/chat.css" rel="stylesheet">
   <script src="/static/chat.js" defer></script>
   <script src="/static/workspaces.js" defer></script>
+  <script src="/static/github.js" defer></script>
 </head>
 <body>
   <nav class="navbar navbar-dark bg-dark px-3" aria-label="Primary">
@@ -31,6 +32,15 @@
         <div id="file-browser-status" class="small text-white-50 mb-2" role="status"></div>
         <div id="workspace-path" class="small text-white-50 mb-2"></div>
         <div id="workspace-tree" class="d-grid gap-1" aria-label="Repository files"></div>
+        <hr class="border-secondary my-4">
+        <div class="sidebar-label mb-2">GitHub status · public read-only</div>
+        <form id="github-form">
+          <label class="visually-hidden" for="github-repo">GitHub owner and repository</label>
+          <input id="github-repo" class="form-control form-control-sm mb-2" value="drakeg/madmallards-code" autocomplete="off" spellcheck="false" placeholder="owner/repo" maxlength="142">
+          <button id="github-load" type="submit" class="btn btn-outline-info btn-sm w-100">Check GitHub</button>
+        </form>
+        <div id="github-status" class="small text-white-50 mt-2" role="status"></div>
+        <div id="github-results" class="mt-2" aria-live="polite"></div>
         <hr class="border-secondary my-4">
         <p class="small text-white-50 mb-1">Runs on your Mac using Ollama.</p>
         <a href="/docs" class="small link-info">API reference</a>

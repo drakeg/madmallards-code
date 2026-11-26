@@ -180,3 +180,13 @@ For an explicit password reset (which also revokes sessions):
 Existing projects, chats and other database records remain untouched.
 Never commit credentials. HTTP LAN traffic is not encrypted: use HTTPS or a VPN
 before exposing the application beyond a trusted network.
+
+## Read-only GitHub status (MMC-011)
+
+The LAN interface now provides **Check GitHub** to inspect a public repository
+using `owner/repo`, with its default branch, up to 12 branches, 12 open PRs,
+and 10 recent CI runs. This uses GitHub's unauthenticated public REST API,
+so rate limits apply and private repositories will not be exposed.
+The app has **no GitHub token**, cannot push code, merge PRs, or modify GitHub.
+Keep local login enabled. Future GitHub write integration will require scoped
+credentials, consent, and an audit trail.
