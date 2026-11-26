@@ -130,3 +130,11 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Validate workspace location and forbid symlink workspaces
 - Fail closed on absent tests, timeouts, missing Docker or test errors
 - Remaining: isolated writable agent worker and authenticated approval UI
+
+## MMC-029 — Creative Studio workbench UI
+
+- Preserve working Bootstrap 5, local model chat, file explorer, code diff review and GitHub pulse
+- Replace generic dark/light framing with an original developer workbench design system
+- Add mobile sidebar controls, accessible labels/focus, reduced-motion CSS and starter prompts
+- Test the existing widget IDs, actual JS syntax, responsive breakpoints and UI asset availability
+- Document brand tokens and design provenance without claiming a finalized logo
