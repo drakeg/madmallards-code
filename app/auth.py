@@ -68,8 +68,8 @@ def login_page() -> HTMLResponse:
 :root{color-scheme:light;--night:#0e1724;--mint:#b8f5d5;--line:#dce5e9;--ink:#152332}
 *{box-sizing:border-box}body{font:16px system-ui,-apple-system,"Segoe UI",sans-serif;
 background:radial-gradient(circle at 10% 14%,#25493f 0,transparent 31%),var(--night);
-color:var(--ink);min-height:100dvh;display:grid;place-items:center;margin:0;padding:20px}
-main{width:min(100%,430px);padding:36px;background:#fff;border-radius:19px;
+color:var(--ink);min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;margin:0;padding:20px}
+main{width:min(100%,430px);max-width:430px;min-width:0;justify-self:center;padding:36px;background:#fff;border-radius:19px;
 box-shadow:0 25px 90px #0005}h1{font-size:1.75rem;letter-spacing:-.045em;margin:20px 0 8px}
 .brand-mark{display:grid;place-items:center;width:46px;height:46px;background:var(--mint);
 border-radius:12px;font-size:24px;font-weight:900;color:#0d4937}
@@ -81,7 +81,7 @@ input:focus{outline:3px solid #63b99b88;outline-offset:2px;border-color:#176e58}
 button{background:#146e56;color:white;border:1px solid #146e56;cursor:pointer;font-weight:750;margin-top:23px}
 button:hover{background:#0c5944}button:disabled{opacity:.7;cursor:wait}
 button:focus-visible{outline:3px solid #56b994;outline-offset:3px}
-small{color:#556b78;display:block;font-size:.75rem;line-height:1.65;border-top:1px solid var(--line);padding-top:18px}
+small{color:#556b78;display:block;font-size:.75rem;line-height:1.65;overflow-wrap:anywhere;border-top:1px solid var(--line);padding-top:18px}
 #status{color:#9f2424;min-height:1.4em;font-size:.88rem}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style></head>
