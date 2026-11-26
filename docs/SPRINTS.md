@@ -112,3 +112,12 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Do not require tokens, credentials, repository writes or other GitHub permissions
 - Add mocked HTTP tests including rate-limit, missing repo and invalid input
 - Remaining: authorized private repos and state-changing PR/branch workflows
+
+## MMC-008 — Public repository provisioning increment
+
+- Add safe host-side import of explicit public GitHub owner/repo identifiers
+- Shallow clone without token, interactive prompts, hooks, or submodules
+- Stage then rename to avoid partial imports; refuse overwriting workspaces
+- Keep the application mount read-only and credentials outside source control
+- Add tests for input safety, non-overwrite, failure cleanup and timeout
+- Remaining: authorized private repositories, authenticated GUI provisioning

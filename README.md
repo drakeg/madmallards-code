@@ -190,3 +190,18 @@ so rate limits apply and private repositories will not be exposed.
 The app has **no GitHub token**, cannot push code, merge PRs, or modify GitHub.
 Keep local login enabled. Future GitHub write integration will require scoped
 credentials, consent, and an audit trail.
+
+## Import public GitHub repositories into workspaces
+
+From the Docker host, use `python3 scripts/import_public_repo.py owner/repo`
+to shallow-clone a public repository into `workspaces/<repo>/`. The existing
+read-only Docker mount immediately exposes its text files through the sidebar;
+`.git` metadata and hidden files are excluded from previews. For an explicit
+name, use `--name safe-folder-name`. If `WORKSPACES_HOST_PATH` points to a
+custom approved host folder, pass that path with `--root`.
+
+The importer accepts only GitHub HTTPS owner/repo identifiers, disables
+interactive credentials, does not initialize submodules or use custom Git
+hooks, times out after 120 seconds, and will not overwrite an existing
+workspace. It does not grant the model file-write or shell access. Do not
+import untrusted repositories for execution; files are reference data only.
