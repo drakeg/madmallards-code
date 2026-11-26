@@ -6,11 +6,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app.ai_proposals import router as ai_proposal_router
-from app.github_status import router as github_router
 from app.api_models import router as models_router
 from app.auth import authenticated
 from app.auth import router as auth_router
 from app.conversations import router as conversations_router
+from app.github_status import router as github_router
 from app.workspaces import router as workspaces_router
 
 app = FastAPI(title="Mad Mallards Code", version="0.1.0")

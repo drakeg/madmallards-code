@@ -92,6 +92,6 @@ async def repository_overview(
 ) -> dict:
     if not NAME.fullmatch(owner) or not REPO.fullmatch(repository):
         raise HTTPException(422, "Invalid GitHub repository identifier")
-    if repository.startswith(".") or repository.endswith(".") or repository.endswith(".git"):
+    if repository.startswith(".") or repository.endswith((".", ".git")):
         raise HTTPException(422, "Invalid GitHub repository name")
     return await source.overview(owner, repository)
