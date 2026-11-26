@@ -41,3 +41,10 @@ within three compact rows. Static badge validity is checked in CI tests.
 Follow semantic versioning for actual tagged releases. Record verified changes
 in `RELEASES.md` and never invent a published tag, passing status or metrics.
 The application is currently pre-release development.
+
+## Frontend dependency maintenance
+
+The Bootstrap 5.3.3 CSS bundle is vendored in `app/static/vendor/bootstrap/`
+with its upstream MIT license. Do not silently introduce remote CDN runtime
+requirements or copy paid design blocks. If updating this dependency, verify
+upstream version, license, checksum, styles and browser QA at responsive widths.

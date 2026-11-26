@@ -48,3 +48,13 @@ def test_no_automatic_prompt_submission_on_suggestion():
     assert "prompt.value = button.dataset.prompt" in script
     assert "form.requestSubmit" not in script
     assert "fetch(" not in script
+
+
+def test_bootstrap_css_is_served_locally():
+    with TestClient(app) as client:
+        html = client.get("/").text
+        css = client.get("/static/vendor/bootstrap/bootstrap.min.css")
+    assert 'href="/static/vendor/bootstrap/bootstrap.min.css"' in html
+    assert "cdn.jsdelivr.net" not in html
+    assert css.status_code == 200
+    assert "Bootstrap" in css.text[:1000] and "v5.3.3" in css.text[:1000]

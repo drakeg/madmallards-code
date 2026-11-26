@@ -5,6 +5,7 @@ below describe merged development features, not independently published releases
 
 ## Unreleased — active pre-release development
 
+- Creative Studio workbench and responsive login refresh, offline Bootstrap CSS, conversation search
 - Local Ollama model discovery and streaming chat; MariaDB-backed history
 - Database-backed Argon2 passwords, revocable server-side sessions and admin bootstrap
 - Read-only repository browser, explicit file context, AI-generated diffs, patch export

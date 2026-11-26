@@ -35,6 +35,20 @@
     messages.scrollTop = messages.scrollHeight;
     return body;
   }
+  function filterConversations() {
+    const search = $("conversation-filter").value.trim().toLocaleLowerCase();
+    const list = $("conversation-list");
+    let found = 0;
+    for (const item of list.querySelectorAll("button")) {
+      item.hidden = Boolean(search && !item.textContent.toLocaleLowerCase().includes(search));
+      if (!item.hidden) found += 1;
+    }
+    $("conversation-filter-status").textContent = search
+      ? found + (found === 1 ? " matching conversation" : " matching conversations")
+      : "";
+  }
+  $("conversation-filter").addEventListener("input", filterConversations);
+
   async function loadConversations() {
     const data = await (await api("/api/v1/conversations")).json();
     const list = $("conversation-list");
@@ -49,6 +63,7 @@
       btn.addEventListener("click", () => openConversation(item.id));
       list.append(btn);
     }
+    filterConversations();
     return data.conversations;
   }
   async function openConversation(id) {
