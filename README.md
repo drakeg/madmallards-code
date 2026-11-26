@@ -232,3 +232,9 @@ surfaces and prompt starter cards. The underlying Bootstrap 5 and authenticated
 APIs are unchanged. On small screens, use **Explore** to open the repository rail;
 press Escape to close it. Use Cmd/Ctrl+K to start a conversation. Suggested
 prompts populate the composer but never submit or contact Ollama automatically.
+
+### Offline styling
+
+Bootstrap 5.3.3 CSS is vendored in `app/static/vendor/bootstrap/` with the
+upstream MIT license. The LAN web UI no longer depends on an external CSS CDN.
+Keep the pinned version, license and checksum synchronized during updates.

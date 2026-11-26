@@ -23,9 +23,9 @@ body {background:var(--canvas);color:var(--ink);font-family:Inter,ui-sans-serif,
 .status-dot {width:8px;height:8px;border-radius:50%;background:#85e6b4;box-shadow:0 0 0 3px #85e6b421}
 .app-navbar .btn-outline-light {border-color:#52616e;color:#e7f2f2}
 .app-navbar .btn-outline-light:hover {background:#263849}
-.shell {min-height:calc(100dvh - 74px)}
-.shell>.row {min-height:calc(100dvh - 74px)}
-.sidebar {background:var(--navy-soft);color:#e7eff3;border-right:1px solid #263f50;max-height:calc(100dvh - 74px);overflow-y:auto;scrollbar-color:#456070 transparent}
+.shell {height:calc(100dvh - 74px);min-height:0}
+.shell>.row {height:100%;min-height:0}
+.sidebar {background:var(--navy-soft);color:#e7eff3;border-right:1px solid #263f50;height:100%;max-height:100%;overflow-y:auto;scrollbar-color:#456070 transparent}
 .sidebar-intro .eyebrow {color:#88ddba;font-size:.68rem;font-weight:800;letter-spacing:.16em}
 .sidebar-intro h2 {font-size:1.65rem;letter-spacing:-.05em;margin:8px 0}
 .sidebar-intro p {font-size:.82rem;color:#b6c9d2;line-height:1.5;margin:0}
@@ -48,20 +48,20 @@ body {background:var(--canvas);color:var(--ink);font-family:Inter,ui-sans-serif,
 .sidebar .link-info {color:#a9f0d0!important}
 .sidebar #github-results .small {overflow-wrap:anywhere;line-height:1.5}
 .sidebar .text-white-50 {color:#b8c8d2!important}
-.chat-panel {background:var(--canvas);min-height:calc(100dvh - 74px);display:flex;flex-direction:column;min-width:0}
+.chat-panel {background:var(--canvas);height:100%;min-height:0;display:flex;flex-direction:column;min-width:0}
 .workspace-header {background:#fff;border-bottom:1px solid var(--line);min-height:89px}
 .eyebrow {color:#447562;font-size:.67rem;font-weight:850;letter-spacing:.15em}
 .conversation-heading h1 {letter-spacing:-.04em;font-weight:790;margin-top:5px;overflow-wrap:anywhere}
 .model-picker {display:flex;align-items:center;gap:12px}
 .model-picker label {color:#465768;white-space:nowrap}
 .model-picker select {min-width:150px;max-width:250px;border:1px solid #cad8de;border-radius:9px;background-color:#f7faf9;font-weight:650;color:#203747}
-.chat-scroll {flex:1;min-height:280px;max-height:calc(100dvh - 300px);overflow-y:auto;scrollbar-color:#b6c6cd transparent}
+.chat-scroll {flex:1;min-height:0;max-height:none;overflow-y:auto;scrollbar-color:#b6c6cd transparent}
 .message {width:min(100%,880px);margin:0 auto 18px;border-radius:14px;padding:20px 24px;border:1px solid #dce6e9;box-shadow:0 3px 12px #10243908}
 .message-user {background:#e8f5ef;border-color:#c9e8dc;margin-top:8px}
 .message-assistant {background:#fff}
 .message-role {font-size:.68rem;letter-spacing:.12em;font-weight:850;color:#396d61;margin-bottom:10px;text-transform:uppercase}
 .message-text {white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font-size:.95rem;color:#243744}
-.welcome-state {width:min(100%,850px);margin:clamp(35px,8vh,105px) auto 35px;padding:0 18px}
+.welcome-state {width:min(100%,850px);margin:clamp(24px,6vh,65px) auto 30px;padding:0 18px}
 .welcome-kicker {display:inline-flex;align-items:center;gap:9px;color:#2e7563;font-size:.68rem;font-weight:850;letter-spacing:.16em}
 .welcome-spark {background:#c8f6df;width:29px;height:29px;border-radius:9px;display:grid;place-items:center;color:#125541;font-size:20px}
 .welcome-state h2 {font-size:clamp(2.35rem,4.4vw,4.25rem);font-weight:830;line-height:1.08;letter-spacing:-.065em;margin:23px 0 17px;max-width:690px}
@@ -95,10 +95,10 @@ body {background:var(--canvas);color:var(--ink);font-family:Inter,ui-sans-serif,
   .brand-words {font-size:.88rem}.brand-words small{font-size:.53rem}
   .brand-mark{width:36px;height:36px;font-size:19px}
   .nav-actions{gap:7px}.trust-indicator{display:none}
-  .shell,.shell>.row {min-height:calc(100dvh - 66px)}
-  .sidebar {display:none;max-height:none;overflow:visible;border-right:0;border-bottom:1px solid #315066}
+  .shell,.shell>.row {height:auto;min-height:calc(100dvh - 66px)}
+  .sidebar {display:none;height:auto;max-height:none;overflow:visible;border-right:0;border-bottom:1px solid #315066}
   .sidebar.is-open {display:block}
-  .chat-panel {min-height:calc(100dvh - 66px)}
+  .chat-panel {height:auto;min-height:calc(100dvh - 66px)}
   .workspace-header {min-height:79px;padding-top:13px!important;padding-bottom:13px!important}
   .conversation-heading h1{font-size:1.06rem}
   .model-picker{gap:5px}.model-picker label{font-size:.72rem!important}.model-picker select{min-width:110px;max-width:158px}

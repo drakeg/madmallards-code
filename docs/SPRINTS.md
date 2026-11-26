@@ -138,3 +138,11 @@ Still out of scope: GitHub code-edit agents, multi-user security, concurrency lo
 - Add mobile sidebar controls, accessible labels/focus, reduced-motion CSS and starter prompts
 - Test the existing widget IDs, actual JS syntax, responsive breakpoints and UI asset availability
 - Document brand tokens and design provenance without claiming a finalized logo
+
+## MMC-030 — Conversation search and offline app shell
+
+- Filter stored conversation titles locally without additional API calls
+- Keep the desktop chat and repository rail within the viewport; retain responsive mobile flow
+- Bundle pinned Bootstrap 5.3.3 CSS with upstream MIT license (no runtime CDN dependency)
+- Preserve authenticated API behavior and existing MariaDB data
+- Verify browser reflow at 390, 768, 1024 and 1440px and conversation filter interactions
