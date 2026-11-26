@@ -96,3 +96,11 @@ def test_disabled_account_and_unknown_user(client):
     assert http.post("/auth/login", json={
         "username": "admin", "password": "temporary-test-password-12345",
     }).status_code == 401
+
+
+def test_login_page_reflows_with_minmax_grid(client):
+    http, _ = client
+    html = http.get("/auth/login").text
+    assert "grid-template-columns:minmax(0,1fr)" in html
+    assert "max-width:430px;min-width:0" in html
+    assert "overflow-wrap:anywhere" in html
