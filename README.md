@@ -1,11 +1,13 @@
 # Mad Mallards Code
 
-[![License](https://img.shields.io/github/license/drakeg/madmallards-code)](https://github.com/drakeg/madmallards-code/blob/main/LICENSE)
+[![CI](https://github.com/drakeg/madmallards-code/actions/workflows/ci.yml/badge.svg)](https://github.com/drakeg/madmallards-code/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/drakeg/madmallards-code?logo=opensourceinitiative)](https://github.com/drakeg/madmallards-code/blob/main/LICENSE) [![Issues](https://img.shields.io/github/issues/drakeg/madmallards-code)](https://github.com/drakeg/madmallards-code/issues) [![Pull requests](https://img.shields.io/github/issues-pr/drakeg/madmallards-code)](https://github.com/drakeg/madmallards-code/pulls)\
+[![Python 3.15](https://img.shields.io/badge/Python-3.15-3776AB?logo=python&logoColor=white)](Dockerfile) [![FastAPI](https://img.shields.io/badge/FastAPI-framework-009688?logo=fastapi&logoColor=white)](requirements.txt) [![MariaDB 11.8](https://img.shields.io/badge/MariaDB-11.8-003545?logo=mariadb&logoColor=white)](compose.yaml) [![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](compose.yaml)\
+[![Ollama](https://img.shields.io/badge/Ollama-local%20models-111111)](https://github.com/ollama/ollama) [![Latest release](https://img.shields.io/github/v/release/drakeg/madmallards-code?include_prereleases)](https://github.com/drakeg/madmallards-code/releases)
 
 
 A self-hosted AI coding platform, built iteratively with Scrum.
 
-**Status:** Sprint 1 foundation. No AI model calls or code-execution agent functionality yet.
+**Status:** Active pre-release development. Working LAN chat with local Ollama models, MariaDB-backed logins and conversation history, read-only repository browsing, AI-generated code diffs, public GitHub status, safe repository import and a host-only isolated Python test runner. **Automatic file edits and GitHub writes are not yet implemented.**
 
 ## Quick start
 
@@ -24,7 +26,7 @@ browser and API endpoints. HTTP is unencrypted; do not expose it to the internet
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-dev.txt
-ruff check app tests
+ruff check app tests migrations scripts
 pytest -q
 ```
 
@@ -46,17 +48,17 @@ environment variables are intentionally configured; avoid printing passwords.
 
 ## Ollama integration (MMC-005)
 
-Install and start Ollama on the Docker host, then pull a model such as \`ollama pull qwen3:4b\`.
-The Compose web application connects to the host using \`OLLAMA_BASE_URL\`. If you run
-Ollama on another trusted machine, configure its reachable URL in the ignored \`.env\`.
+Install and start Ollama on the Docker host, then pull a model such as `ollama pull qwen3:4b`.
+The Compose web application connects to the host using `OLLAMA_BASE_URL`. If you run
+Ollama on another trusted machine, configure its reachable URL in the ignored `.env`.
 
-- \`GET /api/v1/models\` lists locally available models (cloud-backed Ollama entries are excluded).
-- \`POST /api/v1/models/chat\` accepts \`{"model":"qwen3:4b","messages":[{"role":"user","content":"Hi"}]}\`
-  and responds with newline-delimited JSON events of type \`token\`, \`done\`, or \`error\`.
+- `GET /api/v1/models` lists locally available models (cloud-backed Ollama entries are excluded).
+- `POST /api/v1/models/chat` accepts `{"model":"qwen3:4b","messages":[{"role":"user","content":"Hi"}]}`
+  and responds with newline-delimited JSON events of type `token`, `done`, or `error`.
 
-This is an API-only integration; the interactive browser chat and persistent conversation
-workflow are tracked in MMC-006. **Security:** the application is bound to localhost.
-Do not expose the unauthenticated model API to the internet.
+The API also powers the browser chat and persistent conversations. All model endpoints
+require database-backed login. The LAN HTTP connection is unencrypted and must
+not be exposed to the internet.
 
 ## Browser chat (MMC-006)
 
@@ -64,23 +66,23 @@ Open http://localhost:8096 and select a local model. Start a conversation, enter
 question, and watch the response stream. Messages are persisted in MariaDB, so
 you can return to earlier conversations after reloading the page.
 
-This is a **single-user localhost MVP**. Do not expose the service publicly:
-authentication, authorizations, cross-user isolation, concurrent-turn safety,
-and destructive-tool policies are not yet implemented. Cancelling a response
-saves the user's question but does not persist a partial assistant response.
+This is a **trusted-LAN development build** with database-backed login.
+Per-user conversation/workspace isolation, concurrency safety and agent write
+permissions remain unfinished. Cancelling a response saves the question but not
+a partial assistant answer. Do not expose it publicly.
 
 ## Read-only repository workspace browser
 
-Create \`workspaces/\` in this project (or set \`WORKSPACES_HOST_PATH\` in \`.env\`
+Create `workspaces/` in this project (or set `WORKSPACES_HOST_PATH` in `.env`
 to an explicitly approved directory). Put individual repository folders directly
-under it, for example \`workspaces/myproject/\`. Only this directory is mounted
+under it, for example `workspaces/myproject/`. Only this directory is mounted
 into the application, **read-only**. Hidden files, symlinks, large files, and
 common secret/configuration paths are excluded from file previews.
 
-The \`/api/v1/workspaces\` endpoints provide workspace listing, directory trees,
+The `/api/v1/workspaces` endpoints provide workspace listing, directory trees,
 and bounded text previews. This **does not grant the AI write or shell access**.
-Authentication and robust multi-user isolation are future requirements; keep
-the application bound to localhost.
+Login is required, but robust per-user workspace isolation is not yet implemented.
+The default bind host allows trusted-LAN testing and should not be internet-exposed.
 
 ## Ask the AI about a repository file
 
@@ -113,7 +115,7 @@ Model output is untrusted; review every line.
 
 Build context is restricted to runtime source, migrations, and requirements by
 `.dockerignore`. Never commit credentials into runtime source or mount local
-workspace credentials into an unauthenticated web app. To diagnose Docker
+workspace credentials into the web app. To diagnose Docker
 Desktop failures, use `docker info`, `docker compose ps`, and targeted Compose
 logs, each with a timeout; do not delete volumes or restart the Docker engine
 without checking other running workloads.
@@ -147,12 +149,10 @@ to `http://<host-lan-ip>:8096` from any device on the same trusted network.
 Use `APP_PORT` to customize the port. Use `APP_BIND_HOST=127.0.0.1` in your
 local `.env` to disable LAN access.
 
-**Security:** This is currently an unauthenticated single-user development
-service. All LAN clients can read workspace previews, create chats and call
-the local model. Do not forward the port on your router or expose it to the
-internet, public Wi-Fi, or other untrusted networks. Authentication and
-access controls are required before wider deployment. MariaDB is not
-published to the host.
+**Security:** The service requires database-backed login but HTTP traffic is
+unencrypted. Do not forward the port on your router or expose it to the internet,
+public Wi-Fi or other untrusted networks. Per-user authorization and HTTPS are
+required before wider deployment. MariaDB is not published to the host.
 
 ## LAN login protection
 
@@ -167,8 +167,8 @@ The development site uses HTTP on a trusted LAN. Network traffic, including
 the login password and subsequent session cookie, is **not encrypted**.
 Use HTTPS via a trusted reverse proxy or VPN before using it on untrusted
 networks. Set `APP_COOKIE_SECURE=1` only when serving through HTTPS.
-Never publish port 8096 to the public internet. The single shared password
-is not a substitute for multi-user permissions or production authentication.
+Never publish port 8096 to the public internet. Database users do not yet
+provide per-user isolation of chats or workspaces.
 
 ## Database-backed login administration
 
