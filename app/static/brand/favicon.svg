@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title id="title">Mad Mallards Code mascot</title>
+<defs><linearGradient id="head" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#69DB52"/><stop offset="1" stop-color="#05653B"/></linearGradient><linearGradient id="bill" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#FFE26C"/><stop offset="1" stop-color="#F79B23"/></linearGradient></defs>
+<rect x="2" y="2" width="124" height="124" rx="28" fill="#052D29" stroke="#46E3CE" stroke-width="4"/>
+<path d="M24 70Q19 30 56 19L61 9 68 22 84 12 80 27Q106 34 103 70L84 91 38 94Z" fill="url(#head)" stroke="#001F1C" stroke-width="5" stroke-linejoin="round"/>
+<path d="M49 66Q74 66 93 61L116 69 115 83 86 85 52 75Z" fill="url(#bill)" stroke="#00251F" stroke-width="4" stroke-linejoin="round"/>
+<path d="M73 49Q88 41 98 49" stroke="#00312C" stroke-width="6" stroke-linecap="round" fill="none"/>
+<circle cx="86" cy="56" r="5.5" fill="#FFF7DF" stroke="#003029" stroke-width="2"/><circle cx="87" cy="56" r="2.7" fill="#003029"/>
+<path d="M15 84 81 82 89 115 13 115Z" fill="#082E36" stroke="#48E2D5" stroke-width="4" stroke-linejoin="round"/>
+<path d="m26 93 14 9-14 8M49 110h15" stroke="#FFF1D9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<path d="M96 105 114 98 110 114" fill="#FF7666"/>
+</svg>
