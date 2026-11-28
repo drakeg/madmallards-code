@@ -19,7 +19,12 @@ app = FastAPI(title="Mad Mallards Code", version="0.1.0")
 @app.middleware("http")
 async def require_login(request: Request, call_next):
     # Docker health probes are intentionally unauthenticated.
-    if request.url.path == "/health" or request.url.path in {"/auth/login", "/favicon.ico"}:
+    if request.url.path == "/health" or request.url.path in {
+        "/auth/login",
+        "/favicon.ico",
+        "/static/brand/favicon.svg",
+        "/static/brand/mad-mallards-code-logo.svg",
+    }:
         return await call_next(request)
     if not authenticated(request):
         if request.url.path.startswith("/api/") or request.method != "GET":
