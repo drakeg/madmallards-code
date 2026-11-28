@@ -115,3 +115,76 @@ body {background:var(--canvas);color:var(--ink);font-family:Inter,ui-sans-serif,
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+
+/* MMC-031: Mascot-led visual identity | Mad Mallards Code by Mad Mallard Solutions */
+:root {
+  --navy:#042924;
+  --navy-soft:#0c292d;
+  --mint:#60ead3;
+  --accent:#ed735e;
+  --canvas:#f5f4ed;
+  --focus:#00ad9e;
+}
+.app-navbar {
+  min-height:94px;
+  background:linear-gradient(110deg,#031f1c 0%,#073a34 65%,#114942 100%);
+  border-bottom:3px solid #39cbbf;
+  position:relative;
+  isolation:isolate;
+}
+.app-navbar::after {
+  content:"";
+  position:absolute;inset:0 0 0 auto;width:32%;pointer-events:none;opacity:.1;z-index:-1;
+  background:repeating-linear-gradient(115deg,transparent 0 18px,#7be4a5 19px 21px,transparent 22px 47px);
+}
+.brand-lockup {gap:0;flex-shrink:0;min-width:0;}
+.brand-art {width:245px;height:83px;display:block;object-fit:contain;object-position:left center;filter:drop-shadow(0 2px 2px #001c1780)}
+.trust-indicator {font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;}
+.status-dot {background:#3cf5ba;}
+.shell {height:calc(100dvh - 94px);}
+.sidebar {background:linear-gradient(150deg,#072a2c 0%,#0c2634 80%);}
+.sidebar .eyebrow {color:#81f2ca;}
+.sidebar-label {color:#cae6e1;}
+.sidebar-intro h2 {color:#faf6e8;}
+.new-chat-action {background:#69eab3!important;border-color:#69eab3!important;border-left:5px solid #fa7665!important;}
+.new-chat-action:hover {background:#b6f9ce!important;}
+.conversation-item.active {background:#145a4e!important;border-color:#3be7b4!important;}
+.workspace-header {background:#faf9f1;border-bottom:2px solid #cbd9cc;}
+.conversation-heading .eyebrow {color:#116c61;}
+.welcome-state {margin:24px auto 24px;max-width:960px;}
+.welcome-brand {
+  display:flex;justify-content:center;align-items:center;
+  margin:0 0 28px;padding:18px 26px 13px;min-height:185px;border-radius:21px;
+  background:radial-gradient(circle at 70% 40%,#174b48 0%,#052e2c 65%,#021c1d 100%);
+  box-shadow:0 18px 45px #0627231c;position:relative;overflow:hidden;
+  border-bottom:5px solid #ff7660;
+}
+.welcome-brand::before {
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.12;
+  background:repeating-linear-gradient(125deg,transparent 0 22px,#48ecc0 23px 25px,transparent 26px 55px);
+}
+.welcome-brand img {position:relative;width:min(100%,570px);max-height:195px;height:auto;object-fit:contain;filter:drop-shadow(0 7px 5px #001f1b50)}
+.welcome-state h2 {font-size:clamp(2rem,4vw,3.6rem);}
+.welcome-state h2 em {color:#087b69;}
+.welcome-kicker {color:#137963;}
+.welcome-spark,.starter-symbol {background:#d3f8db;color:#04684e;}
+.starter-card {border-top:3px solid #1bc4a6;}
+.starter-card:nth-child(2) {border-top-color:#ff8168;}
+.starter-card:nth-child(3) {border-top-color:#e9b758;}
+.starter-card:hover {border-color:#087b69;}
+#send-button,.btn-primary {background:#036a59;border-color:#036a59;}
+#send-button:hover,.btn-primary:hover {background:#024e45;border-color:#024e45;}
+@media(max-width:767.98px) {
+ .app-navbar {min-height:78px;}
+ .brand-art {width:165px;height:68px;}
+ .shell,.shell>.row {min-height:calc(100dvh - 78px);}
+ .chat-panel {min-height:calc(100dvh - 78px);}
+ .welcome-brand {min-height:100px;border-radius:15px;padding:12px;margin-bottom:24px;}
+ .welcome-brand img {width:min(100%,420px);}
+ .welcome-state {margin:20px auto 18px;}
+ .welcome-state h2 {font-size:clamp(2rem,9vw,2.8rem);}
+}
+@media(min-width:768px) {
+ .app-navbar {height:94px;}
+}

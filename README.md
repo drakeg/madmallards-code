@@ -5,6 +5,8 @@
 [![Ollama](https://img.shields.io/badge/Ollama-local%20models-111111)](https://github.com/ollama/ollama) [![Latest release](https://img.shields.io/github/v/release/drakeg/madmallards-code?include_prereleases)](https://github.com/drakeg/madmallards-code/releases)
 
 
+**Mad Mallards Code** is a self-hosted AI coding workbench by **Mad Mallard Solutions**. It is a separate product from Mad Mallards Adventures.
+
 A self-hosted AI coding platform, built iteratively with Scrum.
 
 **Status:** Active pre-release development. Working LAN chat with local Ollama models, MariaDB-backed logins and conversation history, read-only repository browsing, AI-generated code diffs, public GitHub status, safe repository import and a host-only isolated Python test runner. **Automatic file edits and GitHub writes are not yet implemented.**
@@ -238,3 +240,7 @@ prompts populate the composer but never submit or contact Ollama automatically.
 Bootstrap 5.3.3 CSS is vendored in `app/static/vendor/bootstrap/` with the
 upstream MIT license. The LAN web UI no longer depends on an external CSS CDN.
 Keep the pinned version, license and checksum synchronized during updates.
+
+## Product identity
+
+The approved visual direction is the first mascot-led mallard and terminal logo concept, with an original scalable site SVG and an independent favicon in `app/static/brand/`. The brand lockup identifies **Mad Mallards Code**, with **by Mad Mallard Solutions** as the company credit. No Mad Mallards Adventures branding is used in this product. See [brand guidelines](docs/BRAND.md).
